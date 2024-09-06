@@ -1,0 +1,282 @@
+﻿@page "/database-configuration"
+@inject ILogger<DatabaseConfiguration> Logger
+@inject DatabaseService DatabaseService
+
+<h3>Manage and Configure Database</h3>
+
+<div class="card p-4 mb-4">
+    <div class="form-group">
+        <label for="databaseName">Database Name <span class="text-danger">*</span></label>
+        <input type="text" id="databaseName" class="form-control" @bind="databaseName" />
+        @if (string.IsNullOrWhiteSpace(databaseName))
+        {
+            <div class="text-danger">Database Name is required.</div>
+        }
+    </div>
+
+    <div class="form-group">
+        <label for="databaseType">Database Type <span class="text-danger">*</span></label>
+        <select id="databaseType" class="form-control" @bind="selectedDatabaseType">
+            <option value="">Select Database Type</option>
+            <option value="SQLServer">SQL Server</option>
+            <option value="MySQL">MySQL</option>
+            <option value="Oracle">Oracle</option>
+            <option value="SQLite">SQLite</option>
+        </select>
+        @if (string.IsNullOrWhiteSpace(selectedDatabaseType))
+        {
+            <div class="text-danger">Database Type is required.</div>
+        }
+    </div>
+
+    @if (selectedDatabaseType == "SQLServer")
+    {
+        <div class="form-group">
+            <label>Authentication Mode</label>
+            <div>
+                <div class="form-check">
+                    <input type="radio" id="sqlAuth" name="authMode" class="form-check-input" value="SQL" @onchange="OnAuthenticationModeChanged" />
+                    <label class="form-check-label" for="sqlAuth">SQL Server Authentication</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" id="windowsAuth" name="authMode" class="form-check-input" value="Windows" @onchange="OnAuthenticationModeChanged" />
+                    <label class="form-check-label" for="windowsAuth">Windows Authentication</label>
+                </div>
+            </div>
+
+            <label for="serverName">Server Name</label>
+            <input type="text" id="serverName" class="form-control" @bind="serverName" />
+
+            @if (isSQLAuthSelected)
+            {
+                <label for="username">Username</label>
+                <input type="text" id="username" class="form-control" @bind="username" />
+
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" @bind="password" />
+            }
+
+            <div class="form-check">
+                <input type="checkbox" id="trustServerCertificate" class="form-check-input" @bind="trustServerCertificate" />
+                <label class="form-check-label" for="trustServerCertificate">Trust Server Certificate</label>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Table Configuration</h4>
+    <div class="form-group">
+        <label for="tableName">Table Name <span class="text-danger">*</span></label>
+        <input type="text" id="tableName" class="form-control" @bind="tableName" />
+        @if (string.IsNullOrWhiteSpace(tableName))
+        {
+            <div class="text-danger">Table Name is required.</div>
+        }
+    </div>
+
+    <h5>Select Columns</h5>
+    <div class="form-check">
+        <input type="checkbox" id="SmsID" class="form-check-input" disabled checked />
+        <label class="form-check-label" for="SmsID">SmsID (Primary Key)</label>
+    </div>
+    @foreach (var column in possibleColumns.Where(c => c != "SmsID"))
+    {
+        <div class="form-check d-flex align-items-center mb-2">
+            <input type="checkbox" id="@column" class="form-check-input" @bind="@columnSelections[column]" />
+            <label class="form-check-label mr-2" for="@column" style="width: 160px;">@column</label>
+            @if (columnSelections[column])
+            {
+                <input type="text" class="form-control form-control-sm ml-2" placeholder="Custom Column Name" @bind="@customColumnNames[column]" style="flex-grow: 1; width: 250px;" />
+            }
+        </div>
+    }
+</div>
+
+<button class="btn btn-primary" @onclick="OnConfirm" disabled="@IsFormInvalid">Confirm</button>
+<p>@statusMessage</p>
+
+@code {
+    private string selectedDatabaseType = "";
+    private string serverName = "";
+    private string databaseName = "";
+    private string username = "";
+    private string password = "";
+    private bool trustServerCertificate = false;
+    private string authenticationMode = "SQL"; // "SQL" or "Windows"
+    private string tableName = "";
+    private string statusMessage = "";
+
+
+    private List<string> possibleColumns = new List<string>
+    {
+        "SmsID",
+        "MobileNumber",
+        "MessageText",
+        "SMS_process_on",
+        "SMS_transmitted_on",
+        "DLR_process_on",
+        "DLR_transmitted_on",
+        "DLR_status",
+        "Error_code",
+        "Retry_count"
+    };
+
+
+    private Dictionary<string, bool> columnSelections = new Dictionary<string, bool>
+    {
+        {"SmsID", true},
+        {"MobileNumber", false},
+        {"MessageText", false},
+        {"SMS_process_on", false},
+        {"SMS_transmitted_on", false},
+        {"DLR_process_on", false},
+        {"DLR_transmitted_on", false},
+        {"DLR_status", false},
+        {"Error_code", false},
+        {"Retry_count", false}
+    };
+
+    private Dictionary<string, string> customColumnNames = new Dictionary<string, string>
+    {
+        {"MobileNumber", ""},
+        {"MessageText", ""},
+        {"SMS_process_on", ""},
+        {"SMS_transmitted_on", ""},
+        {"DLR_process_on", ""},
+        {"DLR_transmitted_on", ""},
+        {"DLR_status", ""},
+        {"Error_code", ""},
+        {"Retry_count", ""}
+    };
+
+    private bool IsFormInvalid => string.IsNullOrWhiteSpace(selectedDatabaseType) || string.IsNullOrWhiteSpace(tableName);
+
+    private bool isSQLAuthSelected => authenticationMode == "SQL";
+
+    private void OnAuthenticationModeChanged(ChangeEventArgs e)
+    {
+        authenticationMode = e.Value.ToString();
+    }
+
+    protected override void OnInitialized()
+    {
+        customColumnNames = new Dictionary<string, string>
+        {
+            { "SmsID", "" },
+            { "MobileNumber", "" },
+            { "MessageText", "" },
+            { "SMS_process_on", "" },
+            { "SMS_transmitted_on", "" },
+            { "DLR_process_on", "" },
+            { "DLR_transmitted_on", "" },
+            { "DLR_status", "" },
+            { "Error_code", "" },
+            { "Retry_count", "" }
+        };
+    }
+
+    private async Task OnConfirm()
+    {
+        if (IsFormInvalid)
+        {
+            statusMessage = "Please fill in all required fields.";
+            return;
+        }
+
+        var connectionString = DatabaseService.GenerateConnectionString(serverName, null, username, password, isSQLAuthSelected, trustServerCertificate);
+        Console.WriteLine($"Connection String (without database): {connectionString}");
+
+        var connectionTestResult = await DatabaseService.TestSqlConnectionAsync(connectionString);
+        if (!connectionTestResult)
+        {
+            statusMessage = "Connection test failed. Please check the server details.";
+            return;
+        }
+
+        var databaseCreated = await DatabaseService.CreateDatabaseIfNotExistsAsync(connectionString, databaseName);
+        if (!databaseCreated)
+        {
+            statusMessage = "Failed to create the database.";
+            return;
+        }
+
+        var userDefinedColumns = columnSelections
+            .Where(c => c.Value)
+            .Select(c => new { Original = c.Key, CustomName = GetCustomColumnName(c.Key) })
+            .ToList();
+
+        var requiredColumns = new Dictionary<string, string>
+        {
+            { "SmsID", "SmsID" },
+            { "MobileNumber", "MobileNumber" },
+            { "MessageText", "MessageText" },
+            { "SMS_process_on", "SMS_process_on" },
+            { "SMS_transmitted_on", "SMS_transmitted_on" },
+            { "DLR_process_on", "DLR_process_on" },
+            { "DLR_transmitted_on", "DLR_transmitted_on" },
+            { "DLR_status", "DLR_status" },
+            { "Error_code", "Error_code" },
+            { "Retry_count", "Retry_count" },
+        };
+
+        var columnMappings = requiredColumns.ToDictionary(
+            kvp => kvp.Key,
+            kvp => userDefinedColumns.FirstOrDefault(c => c.Original == kvp.Value)?.CustomName ?? kvp.Value
+        );
+
+        var missingRequiredColumns = requiredColumns
+            .Where(kvp => kvp.Key != "SmsID" && string.IsNullOrWhiteSpace(columnMappings[kvp.Key]))
+            .Select(kvp => kvp.Key)
+            .ToList();
+
+        if (missingRequiredColumns.Any())
+        {
+            statusMessage = $"Required columns missing: {string.Join(", ", missingRequiredColumns)}. Please ensure all necessary columns are selected.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(columnMappings["SmsID"]))
+        {
+            columnMappings["SmsID"] = "SmsID";
+        }
+
+        Console.WriteLine("Column mappings:");
+        foreach (var mapping in columnMappings)
+        {
+            Console.WriteLine($"Original: {mapping.Key}, Custom: {mapping.Value}");
+        }
+
+        var connectionStringWithDb = DatabaseService.GenerateConnectionString(serverName, databaseName, username, password, isSQLAuthSelected, trustServerCertificate);
+        Console.WriteLine($"Connection String (with database): {connectionStringWithDb}");
+
+        var tableCreated = await DatabaseService.CreateTableAsync(connectionStringWithDb, tableName, columnMappings);
+        if (!tableCreated)
+        {
+            statusMessage = "Failed to create the table.";
+            return;
+        }
+
+        var storedProceduresCreated = await DatabaseService.CreateStoredProceduresAsync(
+            connectionStringWithDb,
+            tableName,
+            columnMappings["SmsID"],
+            columnMappings["MobileNumber"],
+            columnMappings["MessageText"],
+            columnMappings["SMS_process_on"],
+            columnMappings["SMS_transmitted_on"]);
+
+        if (!storedProceduresCreated)
+        {
+            statusMessage = "Failed to create stored procedures.";
+            return;
+        }
+
+        statusMessage = "Database, table, and stored procedures created successfully.";
+    }
+
+    private string GetCustomColumnName(string columnName)
+    {
+        return customColumnNames.TryGetValue(columnName, out var customName) && !string.IsNullOrWhiteSpace(customName) ? customName : columnName;
+    }
+}
