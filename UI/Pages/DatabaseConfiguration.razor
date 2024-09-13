@@ -1,4 +1,6 @@
 ﻿@page "/database-configuration"
+@using System.IO
+@using System.Text.Json
 @inject ILogger<DatabaseConfiguration> Logger
 @inject DatabaseService DatabaseService
 
@@ -108,6 +110,11 @@
     private string statusMessage = "";
 
 
+
+    [Inject] private DatabaseConfigService DatabaseConfigService { get; set; }
+
+
+
     private List<string> possibleColumns = new List<string>
     {
         "SmsID",
@@ -184,9 +191,11 @@
             return;
         }
 
+        // Generate the connection string
         var connectionString = DatabaseService.GenerateConnectionString(serverName, null, username, password, isSQLAuthSelected, trustServerCertificate);
         Console.WriteLine($"Connection String (without database): {connectionString}");
 
+        // Test SQL connection
         var connectionTestResult = await DatabaseService.TestSqlConnectionAsync(connectionString);
         if (!connectionTestResult)
         {
@@ -194,6 +203,7 @@
             return;
         }
 
+        // Create database if it doesn't exist
         var databaseCreated = await DatabaseService.CreateDatabaseIfNotExistsAsync(connectionString, databaseName);
         if (!databaseCreated)
         {
@@ -201,30 +211,33 @@
             return;
         }
 
+        // Define required columns and user-defined mappings
         var userDefinedColumns = columnSelections
             .Where(c => c.Value)
             .Select(c => new { Original = c.Key, CustomName = GetCustomColumnName(c.Key) })
             .ToList();
 
         var requiredColumns = new Dictionary<string, string>
-        {
-            { "SmsID", "SmsID" },
-            { "MobileNumber", "MobileNumber" },
-            { "MessageText", "MessageText" },
-            { "SMS_process_on", "SMS_process_on" },
-            { "SMS_transmitted_on", "SMS_transmitted_on" },
-            { "DLR_process_on", "DLR_process_on" },
-            { "DLR_transmitted_on", "DLR_transmitted_on" },
-            { "DLR_status", "DLR_status" },
-            { "Error_code", "Error_code" },
-            { "Retry_count", "Retry_count" },
-        };
+    {
+        { "SmsID", "SmsID" },
+        { "MobileNumber", "MobileNumber" },
+        { "MessageText", "MessageText" },
+        { "SMS_process_on", "SMS_process_on" },
+        { "SMS_transmitted_on", "SMS_transmitted_on" },
+        { "DLR_process_on", "DLR_process_on" },
+        { "DLR_transmitted_on", "DLR_transmitted_on" },
+        { "DLR_status", "DLR_status" },
+        { "Error_code", "Error_code" },
+        { "Retry_count", "Retry_count" },
+    };
 
+        // Map columns
         var columnMappings = requiredColumns.ToDictionary(
             kvp => kvp.Key,
             kvp => userDefinedColumns.FirstOrDefault(c => c.Original == kvp.Value)?.CustomName ?? kvp.Value
         );
 
+        // Check for missing columns
         var missingRequiredColumns = requiredColumns
             .Where(kvp => kvp.Key != "SmsID" && string.IsNullOrWhiteSpace(columnMappings[kvp.Key]))
             .Select(kvp => kvp.Key)
@@ -236,20 +249,24 @@
             return;
         }
 
+        // Ensure "SmsID" is always mapped
         if (string.IsNullOrWhiteSpace(columnMappings["SmsID"]))
         {
             columnMappings["SmsID"] = "SmsID";
         }
 
+        // Log the column mappings
         Console.WriteLine("Column mappings:");
         foreach (var mapping in columnMappings)
         {
             Console.WriteLine($"Original: {mapping.Key}, Custom: {mapping.Value}");
         }
 
+        // Generate connection string with the database name
         var connectionStringWithDb = DatabaseService.GenerateConnectionString(serverName, databaseName, username, password, isSQLAuthSelected, trustServerCertificate);
         Console.WriteLine($"Connection String (with database): {connectionStringWithDb}");
 
+        // Create the table
         var tableCreated = await DatabaseService.CreateTableAsync(connectionStringWithDb, tableName, columnMappings);
         if (!tableCreated)
         {
@@ -257,6 +274,7 @@
             return;
         }
 
+        // Create the stored procedures
         var storedProceduresCreated = await DatabaseService.CreateStoredProceduresAsync(
             connectionStringWithDb,
             tableName,
@@ -272,11 +290,42 @@
             return;
         }
 
-        statusMessage = "Database, table, and stored procedures created successfully.";
+        var configSaved = await DatabaseService.SaveConfigurationToJsonAsync(
+            connectionStringWithDb, 
+            tableName, 
+            columnMappings);
+
+        if (!configSaved)
+        {
+            statusMessage = "Failed to save configuration.";
+            return;
+        }
+
+        statusMessage = "Database, table, and stored procedures created successfully. Configuration saved to JSON.";
     }
 
     private string GetCustomColumnName(string columnName)
     {
         return customColumnNames.TryGetValue(columnName, out var customName) && !string.IsNullOrWhiteSpace(customName) ? customName : columnName;
+    }
+
+
+    public class DatabaseConfig
+    {
+        public string DatabaseName { get; set; }
+        public string DatabaseType { get; set; }
+        public string ServerName { get; set; }
+        public string AuthenticationType { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public bool TrustServerCertificate { get; set; }
+        public string TableName { get; set; }
+        public List<ColumnMapping> ColumnMappings { get; set; }
+    }
+
+    public class ColumnMapping
+    {
+        public string ColumnName { get; set; }
+        public string CustomName { get; set; }
     }
 }

@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 
 namespace UI.Services
 {
@@ -19,12 +21,12 @@ namespace UI.Services
             }
             catch (SqlException ex)
             {
-                Console.WriteLine($"SQL Exception: {ex.Message}");
+                Console.WriteLine($"SQL Exception: {ex.Message} - Error code: {ex.Number}, Line: {ex.LineNumber}");
                 return false;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception: {ex.Message}");
+                Console.WriteLine($"General Exception: {ex.Message}");
                 return false;
             }
         }
@@ -37,10 +39,10 @@ namespace UI.Services
                 await connection.OpenAsync();
 
                 var createDatabaseQuery = $@"
-            IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = '{databaseName}')
-            BEGIN
-                EXEC('CREATE DATABASE [{databaseName}]')
-            END";
+                IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = '{databaseName}')
+                BEGIN
+                    EXEC('CREATE DATABASE [{databaseName}]')
+                END";
 
                 using var command = new SqlCommand(createDatabaseQuery, connection);
                 await command.ExecuteNonQueryAsync();
@@ -54,8 +56,7 @@ namespace UI.Services
             }
         }
 
-        public async Task<bool> CreateTableAsync(string connectionString, string tableName,
-            Dictionary<string, string> columnMappings)
+        public async Task<bool> CreateTableAsync(string connectionString, string tableName, Dictionary<string, string> columnMappings)
         {
             try
             {
@@ -64,13 +65,13 @@ namespace UI.Services
                     .Select(c => $"[{c.Value}] NVARCHAR(MAX)"));
 
                 var createTableQuery = $@"
-            IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{tableName}')
-            BEGIN
-                CREATE TABLE [{tableName}] (
-                    [SmsID] INT IDENTITY(1,1) PRIMARY KEY,
-                {columnDefinitions}
-                )
-            END";
+                IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{tableName}')
+                BEGIN
+                    CREATE TABLE [{tableName}] (
+                        [SmsID] INT IDENTITY(1,1) PRIMARY KEY,
+                        {columnDefinitions}
+                    )
+                END";
 
                 using var connection = new SqlConnection(connectionString);
                 await connection.OpenAsync();
@@ -88,49 +89,43 @@ namespace UI.Services
             }
         }
 
-        public async Task<bool> CreateStoredProceduresAsync(
-            string connectionString,
-            string tableName,
-            string columnSmsID,
-            string columnMobileNumber,
-            string columnMessageText,
-            string columnSmsProcessOn,
-            string columnSmsTransmittedOn)
+        public async Task<bool> CreateStoredProceduresAsync(string connectionString, string tableName, string columnSmsID,
+            string columnMobileNumber, string columnMessageText, string columnSmsProcessOn, string columnSmsTransmittedOn)
         {
             var createFetchProcedureQuery = $@"
-        IF OBJECT_ID('dbo.USP_VF_FETCH_SMS', 'P') IS NULL
-        BEGIN
-            EXEC('
-            CREATE PROCEDURE [dbo].[USP_VF_FETCH_SMS]
-            AS
+            IF OBJECT_ID('dbo.USP_VF_FETCH_SMS', 'P') IS NULL
             BEGIN
-                SET NOCOUNT ON;
+                EXEC('
+                CREATE PROCEDURE [dbo].[USP_VF_FETCH_SMS]
+                AS
+                BEGIN
+                    SET NOCOUNT ON;
 
-                SELECT [{columnSmsID}], [{columnMobileNumber}], [{columnMessageText}]
-                FROM [{tableName}]
-                WHERE [{columnSmsProcessOn}] IS NULL;
+                    SELECT [{columnSmsID}], [{columnMobileNumber}], [{columnMessageText}]
+                    FROM [{tableName}]
+                    WHERE [{columnSmsProcessOn}] IS NULL;
 
-                UPDATE [{tableName}]
-                SET [{columnSmsProcessOn}] = GETDATE()
-                WHERE [{columnSmsProcessOn}] IS NULL;
-            END')
-        END";
+                    UPDATE [{tableName}]
+                    SET [{columnSmsProcessOn}] = GETDATE()
+                    WHERE [{columnSmsProcessOn}] IS NULL;
+                END')
+            END";
 
             var createUpdateProcedureQuery = $@"
-        IF OBJECT_ID('dbo.USP_VF_UPDATE_SMS', 'P') IS NULL
-        BEGIN
-            EXEC('
-            CREATE PROCEDURE [dbo].[USP_VF_UPDATE_SMS]
-            @SmsID INT
-            AS
+            IF OBJECT_ID('dbo.USP_VF_UPDATE_SMS', 'P') IS NULL
             BEGIN
-                SET NOCOUNT ON;
+                EXEC('
+                CREATE PROCEDURE [dbo].[USP_VF_UPDATE_SMS]
+                @SmsID INT
+                AS
+                BEGIN
+                    SET NOCOUNT ON;
 
-                UPDATE [{tableName}]
-                SET [{columnSmsTransmittedOn}] = GETDATE()
-                WHERE [{columnSmsID}] = @SmsID;
-            END')
-        END";
+                    UPDATE [{tableName}]
+                    SET [{columnSmsTransmittedOn}] = GETDATE()
+                    WHERE [{columnSmsID}] = @SmsID;
+                END')
+            END";
 
             return await ExecuteSqlAsync(connectionString, createFetchProcedureQuery) &&
                    await ExecuteSqlAsync(connectionString, createUpdateProcedureQuery);
@@ -176,6 +171,41 @@ namespace UI.Services
             }
 
             return builder.ConnectionString;
+        }
+
+        // Method to save configuration to a JSON file
+        public async Task<bool> SaveConfigurationToJsonAsync(
+            string connectionString,
+            string tableName,
+            Dictionary<string, string> columnMappings)
+        {
+            try
+            {
+                // Define the configuration object
+                var config = new
+                {
+                    ConnectionString = connectionString,
+                    TableName = tableName,
+                    ColumnMappings = columnMappings
+                };
+
+                // Define the path to the JSON file
+                var filePath = "dbconfig.json";
+
+                // Serialize the configuration to JSON format
+                var jsonConfig = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
+
+                // Save the JSON to a file asynchronously
+                await File.WriteAllTextAsync(filePath, jsonConfig);
+
+                Console.WriteLine("Configuration saved to dbconfig.json.");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving configuration to JSON: {ex.Message}");
+                return false;
+            }
         }
     }
 }

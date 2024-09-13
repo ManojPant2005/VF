@@ -1,2 +1,357 @@
 06-09-2024 16:31:29: VF SMS Service started successfully.
 06-09-2024 16:31:38: VF SMS Service stopped.
+06-09-2024 17:12:16: The message 10 was sent to 1234567890 at 06-09-2024 17:12:16
+06-09-2024 17:12:16: The message 11 was sent to 0987654321 at 06-09-2024 17:12:16
+06-09-2024 17:12:16: The message 12 was sent to 1111111111 at 06-09-2024 17:12:16
+06-09-2024 17:12:17: The message 13 was sent to 2222222222 at 06-09-2024 17:12:17
+06-09-2024 17:12:17: The message 14 was sent to 3333333333 at 06-09-2024 17:12:17
+06-09-2024 17:12:17: The message 15 was sent to 1234567890 at 06-09-2024 17:12:17
+06-09-2024 17:12:17: The message 16 was sent to 0987654321 at 06-09-2024 17:12:17
+06-09-2024 17:12:17: The message 17 was sent to 1111111111 at 06-09-2024 17:12:17
+06-09-2024 17:12:17: The message 18 was sent to 2222222222 at 06-09-2024 17:12:17
+06-09-2024 17:12:17: The message 19 was sent to 3333333333 at 06-09-2024 17:12:17
+07-09-2024 16:48:04: The message 20 was sent to 4444444444 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 20 was sent to 4444444444 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 21 was sent to 5555555555 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 21 was sent to 5555555555 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 22 was sent to 6666666666 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 22 was sent to 6666666666 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 23 was sent to 7777777777 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 23 was sent to 7777777777 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 24 was sent to 8888888888 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 24 was sent to 8888888888 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 25 was sent to 9999999999 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 25 was sent to 9999999999 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 26 was sent to 1010101010 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 26 was sent to 1010101010 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 27 was sent to 1212121212 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 27 was sent to 1212121212 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 28 was sent to 1313131313 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 28 was sent to 1313131313 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 29 was sent to 1414141414 at 07-09-2024 16:48:04
+07-09-2024 16:48:04: The message 29 was sent to 1414141414 at 07-09-2024 16:48:04
+07-09-2024 16:53:43: The message 30 was sent to 1515151515 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 31 was sent to 1616161616 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 32 was sent to 1717171717 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 33 was sent to 1818181818 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 34 was sent to 1919191919 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 35 was sent to 2020202020 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 36 was sent to 2121212121 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 37 was sent to 2222222222 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 38 was sent to 2323232323 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 39 was sent to 2424242424 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 40 was sent to 2525252525 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 41 was sent to 2626262626 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 42 was sent to 2727272727 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 43 was sent to 2828282828 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 44 was sent to 2929292929 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 45 was sent to 3030303030 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 46 was sent to 3131313131 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 47 was sent to 3232323232 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 48 was sent to 3333333333 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 49 was sent to 3434343434 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 50 was sent to 3535353535 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 51 was sent to 3636363636 at 07-09-2024 16:53:43
+07-09-2024 16:53:43: The message 52 was sent to 3737373737 at 07-09-2024 16:53:43
+07-09-2024 16:58:42: The message 53 was sent to 4444444444 at 07-09-2024 16:58:42
+07-09-2024 17:19:09: The message 54 was sent to 3838383838 at 07-09-2024 17:19:09
+07-09-2024 17:19:09: The message 55 was sent to 3939393939 at 07-09-2024 17:19:09
+07-09-2024 17:19:09: The message 56 was sent to 4040404040 at 07-09-2024 17:19:09
+07-09-2024 17:19:09: The message 57 was sent to 4141414141 at 07-09-2024 17:19:09
+07-09-2024 17:24:09: The message 58 was sent to 4242424242 at 07-09-2024 17:24:09
+07-09-2024 19:56:18: SMS Service started successfully.
+07-09-2024 19:56:18: Message ID 59 sent to 4343434343 at 07-09-2024 19:56:18: Test message 44
+07-09-2024 19:56:18: Message ID 60 sent to 4444444444 at 07-09-2024 19:56:18: Test message 45
+07-09-2024 19:56:18: Message ID 61 sent to 4545454545 at 07-09-2024 19:56:18: Test message 46
+07-09-2024 19:56:18: Message ID 62 sent to 4646464646 at 07-09-2024 19:56:18: Test message 47
+07-09-2024 19:56:18: Message ID 63 sent to 4747474747 at 07-09-2024 19:56:18: Test message 48
+07-09-2024 19:56:18: Message ID 64 sent to 4848484848 at 07-09-2024 19:56:18: Test message 49
+07-09-2024 19:56:18: Message ID 65 sent to 4949494949 at 07-09-2024 19:56:18: Test message 50
+08-09-2024 08:29:08: SMS Service started successfully.
+09-09-2024 17:13:21: SMS Service started successfully.
+09-09-2024 17:13:40: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:13:40: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:13:41: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:14:12: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:14:12: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:14:21: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:14:50: SMS Service started successfully.
+09-09-2024 17:15:07: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:15:07: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:15:10: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:15:37: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:15:37: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:15:40: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:16:10: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:16:10: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:16:11: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:16:54: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:16:54: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:16:57: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:17:07: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:17:17: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:17:27: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:24:39: SMS Service started successfully.
+09-09-2024 17:24:56: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:24:56: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:24:59: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:25:26: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:25:26: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:25:29: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:25:56: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:25:56: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:25:59: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:26:09: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:27:19: SMS Service started successfully.
+09-09-2024 17:27:36: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:27:36: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:27:39: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:28:05: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:28:05: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:28:09: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:28:36: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:28:36: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:28:39: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:28:49: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:29:16: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:29:16: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:29:19: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:29:29: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:29:39: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:29:49: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:30:16: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:30:16: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:30:19: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:30:29: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:30:39: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:30:49: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:30:59: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:31:08: SMS Service started successfully.
+09-09-2024 17:31:26: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:31:26: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:31:28: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:33:40: SMS Service started successfully.
+09-09-2024 17:34:00: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:34:00: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:34:00: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:34:27: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:34:27: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:34:30: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:35:51: SMS Service started successfully.
+09-09-2024 17:36:08: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:36:08: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:36:11: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:36:38: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:36:38: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:36:41: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:38:26: SMS Service started successfully.
+09-09-2024 17:38:44: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:38:44: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:38:46: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:40:47: SMS Service started successfully.
+09-09-2024 17:41:04: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+09-09-2024 17:41:04: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:35:42: SMS Service started successfully.
+10-09-2024 10:36:00: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:36:00: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:36:03: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:37:43: SMS Service started successfully.
+10-09-2024 10:38:03: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:38:03: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:45:07: SMS Service started successfully.
+10-09-2024 10:45:24: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:45:24: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:45:27: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:45:54: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:45:54: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:45:57: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:46:24: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:46:24: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:46:27: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:46:33: SMS Service started successfully.
+10-09-2024 10:46:50: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:46:50: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 10:46:53: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 11:06:39: SMS Service started successfully.
+10-09-2024 11:06:57: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 11:06:57: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 11:06:59: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:03:01: SMS Service started successfully.
+10-09-2024 13:03:19: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:03:19: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:03:21: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:03:48: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:03:48: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:03:51: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:04:18: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:04:18: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:04:21: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:04:31: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:04:58: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:04:58: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:05:01: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:05:11: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:05:21: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:05:31: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:05:58: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:05:58: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:06:01: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:06:11: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:06:21: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:06:31: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:06:41: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:06:51: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:07:18: Error processing SMS messages: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: Named Pipes Provider, error: 40 - Could not open a connection to SQL Server)
+10-09-2024 13:07:38: SMS Service started successfully.
+10-09-2024 13:07:38: An unexpected error occurred: Server name and database name must be provided.
+10-09-2024 13:07:38: Push SMS Job has stopped.
+10-09-2024 13:10:00: SMS Service started successfully.
+10-09-2024 13:10:00: An unexpected error occurred: Server name and database name must be provided.
+10-09-2024 13:10:00: Push SMS Job has stopped.
+10-09-2024 13:14:36: SMS Service started successfully.
+10-09-2024 13:14:36: An unexpected error occurred: Server name and database name must be provided.
+10-09-2024 13:14:36: Push SMS Job has stopped.
+10-09-2024 13:30:31: SMS Service started successfully.
+10-09-2024 13:30:31: An unexpected error occurred: Connection string is not set.
+10-09-2024 13:30:31: Push SMS Job has stopped.
+10-09-2024 22:02:52: SMS Service started successfully.
+10-09-2024 22:02:52: An unexpected error occurred: Connection string is not set.
+10-09-2024 22:02:52: Push SMS Job has stopped.
+10-09-2024 22:08:06: SMS Service started successfully.
+10-09-2024 22:08:06: An unexpected error occurred: Connection string is not set.
+10-09-2024 22:08:06: Push SMS Job has stopped.
+10-09-2024 22:08:31: SMS Service started successfully.
+10-09-2024 22:16:12: SMS Service started successfully.
+10-09-2024 22:16:13: Message ID 1 sent to 1234567890 at 10-09-2024 22:16:13: Test message 1
+10-09-2024 22:16:13: Message ID 2 sent to 0987654321 at 10-09-2024 22:16:13: Test message 2
+10-09-2024 22:16:13: Message ID 3 sent to 1111111111 at 10-09-2024 22:16:13: Test message 3
+10-09-2024 22:16:13: Message ID 4 sent to 2222222222 at 10-09-2024 22:16:13: Test message 4
+10-09-2024 22:16:13: Message ID 5 sent to 3333333333 at 10-09-2024 22:16:13: Test message 5
+10-09-2024 22:16:13: Message ID 6 sent to 4444444444 at 10-09-2024 22:16:13: Test message 6
+10-09-2024 22:16:13: Message ID 7 sent to 5555555555 at 10-09-2024 22:16:13: Test message 7
+10-09-2024 22:16:13: Message ID 8 sent to 6666666666 at 10-09-2024 22:16:13: Test message 8
+10-09-2024 22:16:13: Message ID 9 sent to 7777777777 at 10-09-2024 22:16:13: Test message 9
+10-09-2024 22:16:13: Message ID 10 sent to 8888888888 at 10-09-2024 22:16:13: Test message 10
+10-09-2024 22:16:13: Message ID 11 sent to 9999999999 at 10-09-2024 22:16:13: Test message 11
+12-09-2024 10:17:00: SMS Service started successfully.
+12-09-2024 10:17:11: Error processing SMS messages: Cannot open database "TestDatabaseFromUI" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:17:11: Error processing SMS messages: Cannot open database "TestDatabaseFromUI" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:17:30: Error processing SMS messages: Cannot open database "TestDatabaseFromUI" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:17:30: Error processing SMS messages: Cannot open database "TestDatabaseFromUI" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:17:40: Error processing SMS messages: Cannot open database "TestDatabaseFromUI" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:18:00: Error processing SMS messages: Cannot open database "TestDatabaseFromUI" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:18:00: Error processing SMS messages: Cannot open database "TestDatabaseFromUI" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:18:10: Error processing SMS messages: Cannot open database "TestDatabaseFromUI" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:18:20: Error processing SMS messages: Cannot open database "TestDatabaseFromUI" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:18:40: Error processing SMS messages: Cannot open database "TestDatabaseFromUI" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:18:40: Error processing SMS messages: Cannot open database "TestDatabaseFromUI" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:18:54: SMS Service started successfully.
+12-09-2024 10:21:24: Message ID 1 sent to 1234567890 at 12-09-2024 10:21:24: Test message 1
+12-09-2024 10:21:32: SMS Service started successfully.
+12-09-2024 10:21:32: Message ID 1 sent to 1234567890 at 12-09-2024 10:21:32: Test message 1
+12-09-2024 10:22:02: Error updating SMS record 1: Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+Operation cancelled by user.
+The statement has been terminated.
+12-09-2024 10:22:02: Message ID 2 sent to 0987654321 at 12-09-2024 10:22:02: Test message 2
+12-09-2024 10:22:32: Error updating SMS record 2: Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+Operation cancelled by user.
+The statement has been terminated.
+12-09-2024 10:22:32: Message ID 3 sent to 1111111111 at 12-09-2024 10:22:32: Test message 3
+12-09-2024 10:23:02: Error updating SMS record 3: Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+Operation cancelled by user.
+The statement has been terminated.
+12-09-2024 10:23:02: Message ID 4 sent to 2222222222 at 12-09-2024 10:23:02: Test message 4
+12-09-2024 10:23:29: SMS Service started successfully.
+12-09-2024 10:23:30: Message ID 1 sent to 1234567890 at 12-09-2024 10:23:30: Test message 1
+12-09-2024 10:24:00: Error updating SMS record 1: Timeout expired.  The timeout period elapsed prior to completion of the operation or the server is not responding.
+Operation cancelled by user.
+The statement has been terminated.
+12-09-2024 10:24:00: Message ID 2 sent to 0987654321 at 12-09-2024 10:24:00: Test message 2
+12-09-2024 10:24:12: SMS Service started successfully.
+12-09-2024 10:24:12: Message ID 1 sent to 1234567890 at 12-09-2024 10:24:12: Test message 1
+12-09-2024 10:26:43: SMS Service started successfully.
+12-09-2024 10:26:55: Error processing SMS messages: Cannot open database "VF" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:26:55: Error processing SMS messages: Cannot open database "VF" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:27:14: Error processing SMS messages: Cannot open database "VF" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:27:14: Error processing SMS messages: Cannot open database "VF" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:27:23: Error processing SMS messages: Cannot open database "VF" requested by the login. The login failed.
+Login failed for user 'MP\pantm'.
+12-09-2024 10:28:23: Message ID 1 sent to 1234567890 at 12-09-2024 10:28:23: Test message 1
+12-09-2024 10:28:24: Message ID 2 sent to 0987654321 at 12-09-2024 10:28:24: Test message 2
+12-09-2024 10:28:24: Message ID 3 sent to 1111111111 at 12-09-2024 10:28:24: Test message 3
+12-09-2024 10:28:24: Message ID 4 sent to 2222222222 at 12-09-2024 10:28:24: Test message 4
+12-09-2024 10:28:24: Message ID 5 sent to 3333333333 at 12-09-2024 10:28:24: Test message 5
+12-09-2024 10:28:24: Message ID 6 sent to 4444444444 at 12-09-2024 10:28:24: Test message 6
+12-09-2024 10:28:24: Message ID 7 sent to 5555555555 at 12-09-2024 10:28:24: Test message 7
+12-09-2024 10:28:24: Message ID 8 sent to 6666666666 at 12-09-2024 10:28:24: Test message 8
+12-09-2024 10:28:24: Message ID 9 sent to 7777777777 at 12-09-2024 10:28:24: Test message 9
+12-09-2024 10:28:24: Message ID 10 sent to 8888888888 at 12-09-2024 10:28:24: Test message 10
+12-09-2024 10:28:24: Message ID 11 sent to 9999999999 at 12-09-2024 10:28:24: Test message 11
+12-09-2024 10:28:24: Message ID 12 sent to 1010101010 at 12-09-2024 10:28:24: Test message 12
+12-09-2024 10:28:24: Message ID 13 sent to 1212121212 at 12-09-2024 10:28:24: Test message 13
+12-09-2024 10:28:24: Message ID 14 sent to 1313131313 at 12-09-2024 10:28:24: Test message 14
+12-09-2024 10:28:24: Message ID 15 sent to 1414141414 at 12-09-2024 10:28:24: Test message 15
+12-09-2024 10:28:24: Message ID 16 sent to 1515151515 at 12-09-2024 10:28:24: Test message 16
+12-09-2024 10:28:24: Message ID 17 sent to 1616161616 at 12-09-2024 10:28:24: Test message 17
+12-09-2024 10:28:24: Message ID 18 sent to 1717171717 at 12-09-2024 10:28:24: Test message 18
+12-09-2024 10:28:24: Message ID 19 sent to 1818181818 at 12-09-2024 10:28:24: Test message 19
+12-09-2024 10:28:24: Message ID 20 sent to 1919191919 at 12-09-2024 10:28:24: Test message 20
+12-09-2024 10:28:43: Message ID 21 sent to 1234567890 at 12-09-2024 10:28:43: Test message 1
+12-09-2024 10:28:43: Message ID 22 sent to 0987654321 at 12-09-2024 10:28:43: Test message 2
+12-09-2024 10:28:43: Message ID 23 sent to 1111111111 at 12-09-2024 10:28:43: Test message 3
+12-09-2024 10:28:43: Message ID 24 sent to 2222222222 at 12-09-2024 10:28:43: Test message 4
+12-09-2024 10:28:43: Message ID 25 sent to 3333333333 at 12-09-2024 10:28:43: Test message 5
+12-09-2024 10:28:43: Message ID 26 sent to 4444444444 at 12-09-2024 10:28:43: Test message 6
+12-09-2024 10:28:43: Message ID 27 sent to 5555555555 at 12-09-2024 10:28:43: Test message 7
+12-09-2024 10:28:43: Message ID 28 sent to 6666666666 at 12-09-2024 10:28:43: Test message 8
+12-09-2024 10:28:43: Message ID 29 sent to 7777777777 at 12-09-2024 10:28:43: Test message 9
+12-09-2024 10:28:43: Message ID 30 sent to 8888888888 at 12-09-2024 10:28:43: Test message 10
+12-09-2024 10:28:43: Message ID 31 sent to 9999999999 at 12-09-2024 10:28:43: Test message 11
+12-09-2024 10:28:43: Message ID 32 sent to 1010101010 at 12-09-2024 10:28:43: Test message 12
+12-09-2024 10:28:43: Message ID 33 sent to 1212121212 at 12-09-2024 10:28:43: Test message 13
+12-09-2024 10:28:43: Message ID 34 sent to 1313131313 at 12-09-2024 10:28:43: Test message 14
+12-09-2024 10:28:43: Message ID 35 sent to 1414141414 at 12-09-2024 10:28:43: Test message 15
+12-09-2024 10:28:43: Message ID 36 sent to 1515151515 at 12-09-2024 10:28:43: Test message 16
+12-09-2024 10:28:43: Message ID 37 sent to 1616161616 at 12-09-2024 10:28:43: Test message 17
+12-09-2024 10:28:43: Message ID 38 sent to 1717171717 at 12-09-2024 10:28:43: Test message 18
+12-09-2024 10:28:43: Message ID 39 sent to 1818181818 at 12-09-2024 10:28:43: Test message 19
+12-09-2024 10:28:43: Message ID 40 sent to 1919191919 at 12-09-2024 10:28:43: Test message 20
+12-09-2024 10:30:03: Message ID 41 sent to 1234567890 at 12-09-2024 10:30:03: Test message 1
+12-09-2024 10:30:03: Message ID 42 sent to 0987654321 at 12-09-2024 10:30:03: Test message 2
+12-09-2024 10:30:03: Message ID 43 sent to 1111111111 at 12-09-2024 10:30:03: Test message 3
+12-09-2024 10:30:03: Message ID 44 sent to 2222222222 at 12-09-2024 10:30:03: Test message 4
+12-09-2024 10:30:03: Message ID 45 sent to 3333333333 at 12-09-2024 10:30:03: Test message 5
+12-09-2024 10:30:03: Message ID 46 sent to 4444444444 at 12-09-2024 10:30:03: Test message 6
+12-09-2024 10:30:03: Message ID 47 sent to 5555555555 at 12-09-2024 10:30:03: Test message 7
+12-09-2024 10:30:03: Message ID 48 sent to 6666666666 at 12-09-2024 10:30:03: Test message 8
+12-09-2024 10:30:03: Message ID 49 sent to 7777777777 at 12-09-2024 10:30:03: Test message 9
+12-09-2024 10:30:03: Message ID 50 sent to 8888888888 at 12-09-2024 10:30:03: Test message 10
+12-09-2024 10:30:03: Message ID 51 sent to 9999999999 at 12-09-2024 10:30:03: Test message 11
+12-09-2024 10:30:03: Message ID 52 sent to 1010101010 at 12-09-2024 10:30:03: Test message 12
+12-09-2024 10:30:03: Message ID 53 sent to 1212121212 at 12-09-2024 10:30:03: Test message 13
+12-09-2024 10:30:03: Message ID 54 sent to 1313131313 at 12-09-2024 10:30:03: Test message 14
+12-09-2024 10:30:03: Message ID 55 sent to 1414141414 at 12-09-2024 10:30:03: Test message 15
+12-09-2024 10:30:03: Message ID 56 sent to 1515151515 at 12-09-2024 10:30:03: Test message 16
+12-09-2024 10:30:03: Message ID 57 sent to 1616161616 at 12-09-2024 10:30:03: Test message 17
+12-09-2024 10:30:03: Message ID 58 sent to 1717171717 at 12-09-2024 10:30:03: Test message 18
+12-09-2024 10:30:03: Message ID 59 sent to 1818181818 at 12-09-2024 10:30:03: Test message 19
+12-09-2024 10:30:03: Message ID 60 sent to 1919191919 at 12-09-2024 10:30:03: Test message 20
+12-09-2024 10:31:42: SMS Service started successfully.
+12-09-2024 21:07:55: SMS Service started successfully.
+12-09-2024 21:12:59: SMS Service started successfully.
+13-09-2024 08:59:25: SMS Service started successfully.

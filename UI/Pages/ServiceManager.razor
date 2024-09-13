@@ -1,7 +1,5 @@
 ﻿@page "/service-control"
-@using Microsoft.Extensions.Logging
-@using UI.Services
-@inject WindowsServiceManager Service
+
 @inject ILogger<ServiceManager> Logger
 
 <div class="container mt-5">
@@ -12,9 +10,6 @@
         <div class="card-body">
             <div class="service-section mb-4">
                 <div class="service-detail">
-                    <strong>Service Name:</strong> VF SMS
-                </div>
-                <div class="service-detail">
                     <strong>Status:</strong>
                     <span class="@statusClass">@statusMessage</span>
                 </div>
@@ -24,7 +19,6 @@
 
             <div class="d-flex justify-content-end my-3">
                 <button class="btn btn-success btn-sm mx-1" @onclick="StartService">Start</button>
-                <button class="btn btn-warning btn-sm mx-1" @onclick="RestartService">Restart</button>
                 <button class="btn btn-danger btn-sm mx-1" @onclick="StopService">Stop</button>
             </div>
         </div>
@@ -32,98 +26,4 @@
 </div>
 
 @code {
-    private string statusMessage = "Unknown";
-    private string statusClass = "text-secondary"; // Default 
-
-    protected override async Task OnInitializedAsync()
-    {
-        await CheckServiceStatus();
-    }
-
-    private async Task StartService()
-    {
-        try
-        {
-            bool success = Service.StartService();
-            if (success)
-            {
-                statusMessage = "Running";
-                statusClass = "text-success"; // Green for running
-            }
-            else
-            {
-                statusMessage = "Failed to start";
-                statusClass = "text-danger"; // Red for failure
-            }
-        }
-        catch (Exception ex)
-        {
-            statusMessage = $"Error: {ex.Message}";
-            statusClass = "text-danger"; // Red for error
-            Logger.LogError(ex, "Error starting service");
-        }
-    }
-
-    private async Task RestartService()
-    {
-        try
-        {
-            await StopService();
-            await StartService();
-        }
-        catch (Exception ex)
-        {
-            statusMessage = $"Error: {ex.Message}";
-            statusClass = "text-danger"; // Red for error
-            Logger.LogError(ex, "Error restarting service");
-        }
-    }
-
-    private async Task StopService()
-    {
-        try
-        {
-            bool success = Service.StopService();
-            if (success)
-            {
-                statusMessage = "Stopped";
-                statusClass = "text-danger"; // Red for stopped
-            }
-            else
-            {
-                statusMessage = "Failed to stop";
-                statusClass = "text-warning"; // Yellow for failure
-            }
-        }
-        catch (Exception ex)
-        {
-            statusMessage = $"Error: {ex.Message}";
-            statusClass = "text-danger"; // Red for error
-            Logger.LogError(ex, "Error stopping service");
-        }
-    }
-
-    private async Task CheckServiceStatus()
-    {
-        try
-        {
-            bool isRunning = Service.IsServiceRunning();
-            if (isRunning)
-            {
-                statusMessage = "Running";
-                statusClass = "text-success"; // Green for running
-            }
-            else
-            {
-                statusMessage = "Stopped";
-                statusClass = "text-danger"; // Red for stopped
-            }
-        }
-        catch (Exception ex)
-        {
-            statusMessage = $"Error: {ex.Message}";
-            statusClass = "text-danger"; // Red for error
-            Logger.LogError(ex, "Error checking service status");
-        }
-    }
 }
