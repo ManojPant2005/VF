@@ -30,15 +30,18 @@ builder.Services.AddSingleton<DatabaseConfigurationFactory>();
 builder.Services.AddSingleton<DatabaseConfigService>();
 builder.Services.AddSingleton<DatabaseService>();
 
+
 var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dbconfig.json");
 
 // Register PushSmsJob as a hosted service and pass the configPath
 
 builder.Services.AddHostedService(sp => new PushSmsJob(sp.GetRequiredService<DatabaseConfigService>(), configPath));
 
-
-// Register PushSmsJob as a background service
-builder.Services.AddHostedService<PushSmsJob>();
+builder.Services.AddSingleton<PushSmsJob>(provider =>
+{
+    var databaseConfigService = provider.GetRequiredService<DatabaseConfigService>();
+    return new PushSmsJob(databaseConfigService, configPath);
+});
 
 // Register MVC for controllers (if you have API controllers or MVC views)
 builder.Services.AddControllersWithViews();

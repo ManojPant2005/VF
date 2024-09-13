@@ -20,7 +20,7 @@ namespace UI.Jobs
         public PushSmsJob(DatabaseConfigService databaseConfigService, string configPath)
         {
             _databaseConfigService = databaseConfigService;
-            _configPath = configPath; 
+            _configPath = configPath;
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
@@ -28,7 +28,17 @@ namespace UI.Jobs
             Console.WriteLine("Starting SMS Service...");
 
             // Load the configuration before starting the service
-            await _databaseConfigService.LoadConfigurationAsync(_configPath);
+            try
+            {
+                await _databaseConfigService.LoadConfigurationAsync(_configPath);
+                Console.WriteLine("Configuration loaded successfully.");
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                LogMessage($"Configuration file not found: {ex.Message}");
+                return;
+            }
 
             // Now start the actual background service
             await base.StartAsync(cancellationToken);

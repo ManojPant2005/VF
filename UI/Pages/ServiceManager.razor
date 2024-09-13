@@ -1,6 +1,6 @@
 ﻿@page "/service-control"
-
-@inject ILogger<ServiceManager> Logger
+@using System.Threading
+@using UI.Jobs
 
 <div class="container mt-5">
     <div class="card shadow-sm">
@@ -18,12 +18,34 @@
             <hr />
 
             <div class="d-flex justify-content-end my-3">
-                <button class="btn btn-success btn-sm mx-1" @onclick="StartService">Start</button>
-                <button class="btn btn-danger btn-sm mx-1" @onclick="StopService">Stop</button>
+                <button class="btn btn-success btn-sm mx-1" @onclick="StartService" disabled="@isServiceRunning">Start</button>
+                <button class="btn btn-danger btn-sm mx-1" @onclick="StopService" disabled="@(!isServiceRunning)">Stop</button>
             </div>
         </div>
     </div>
 </div>
 
 @code {
+    private string statusMessage = "Service is stopped.";
+    private string statusClass = "text-danger";
+    private bool isServiceRunning = false;
+
+    // Inject the PushSmsJob service
+    [Inject] PushSmsJob PushSmsJob { get; set; }
+
+    private async Task StartService()
+    {
+        await PushSmsJob.StartAsync(new CancellationToken());
+        isServiceRunning = true;
+        statusMessage = "Service is running.";
+        statusClass = "text-success";
+    }
+
+    private async Task StopService()
+    {
+        await PushSmsJob.StopAsync(new CancellationToken());
+        isServiceRunning = false;
+        statusMessage = "Service is stopped.";
+        statusClass = "text-danger";
+    }
 }
