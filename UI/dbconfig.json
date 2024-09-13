@@ -1,6 +1,6 @@
 {
-  "ConnectionString": "Data Source=MP\\SQLEXPRESS;Initial Catalog=VF;Integrated Security=True;TrustServerCertificate=True",
-  "TableName": "VF_SMS",
+  "ConnectionString": "Data Source=MP\\SQLEXPRESS;Initial Catalog=MyDB;Integrated Security=True;TrustServerCertificate=True",
+  "TableName": "MyTable",
   "ColumnMappings": {
     "SmsID": "SmsID",
     "MobileNumber": "MobileNumber",

@@ -13,10 +13,15 @@ namespace UI.Jobs
         private readonly DatabaseConfigService _databaseConfigService;
         private readonly string _logFilePath = "D:\\IN\\VF\\VF_SMS.txt";
         private readonly PeriodicTimer _periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(60));
+        private bool _isConfigLoaded = false;
 
         private readonly string _configPath;
+        public string ErrorMessage { get; private set; }
 
-        // Inject the DatabaseConfigService and the config file path
+        // Expose _isConfigLoaded with a public property
+        public bool IsConfigLoaded => _isConfigLoaded;
+
+        // Inject DatabaseConfigService and the config file path
         public PushSmsJob(DatabaseConfigService databaseConfigService, string configPath)
         {
             _databaseConfigService = databaseConfigService;
@@ -25,27 +30,46 @@ namespace UI.Jobs
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            Console.WriteLine("Starting SMS Service...");
-
-            // Load the configuration before starting the service
             try
             {
-                await _databaseConfigService.LoadConfigurationAsync(_configPath);
-                Console.WriteLine("Configuration loaded successfully.");
-            }
-            catch (FileNotFoundException ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                LogMessage($"Configuration file not found: {ex.Message}");
-                return;
-            }
+                Console.WriteLine("Starting SMS Service...");
 
-            // Now start the actual background service
-            await base.StartAsync(cancellationToken);
+                // Load the configuration before starting the service
+                await _databaseConfigService.LoadConfigurationAsync(_configPath);
+
+                // Check if configuration is valid
+                if (string.IsNullOrEmpty(_databaseConfigService.ConnectionString))
+                {
+                    throw new InvalidOperationException("Connection string is not set.");
+                }
+
+                _isConfigLoaded = true;
+                Console.WriteLine("Configuration loaded successfully.");
+
+                // Now start the actual background service
+                await base.StartAsync(cancellationToken);
+            }
+            catch (FileNotFoundException)
+            {
+                ErrorMessage = "Database configuration is missing. Please configure the database first.";
+                Console.WriteLine(ErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"An error occurred while starting the service: {ex.Message}";
+                Console.WriteLine(ErrorMessage);
+            }
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            // If configuration is not loaded, return early without running the background job
+            if (!_isConfigLoaded)
+            {
+                LogMessage(ErrorMessage ?? "Configuration not loaded. Cannot start SMS processing.");
+                return;
+            }
+
             try
             {
                 Console.WriteLine("SMS Service is starting.");
@@ -79,10 +103,7 @@ namespace UI.Jobs
 
         private void ProcessSmsMessages()
         {
-            // Fetch dynamic connection string from the configuration service
             string connectionString = _databaseConfigService.GenerateConnectionString();
-
-            // Log the connection string for debugging purposes (be careful with sensitive info in production)
             Console.WriteLine($"Using Connection String: {connectionString}");
 
             try

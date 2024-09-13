@@ -1,51 +1,114 @@
 ﻿@page "/service-control"
 @using System.Threading
 @using UI.Jobs
+@inject PushSmsJob PushSmsJob
 
 <div class="container mt-5">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h3 class="mb-0">Service Control</h3>
-        </div>
-        <div class="card-body">
-            <div class="service-section mb-4">
-                <div class="service-detail">
-                    <strong>Status:</strong>
-                    <span class="@statusClass">@statusMessage</span>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-8 col-sm-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">
+                        <i class="fas fa-cogs"></i> Service Control
+                    </h3>
+                    <span class="badge badge-pill badge-light">@(isServiceRunning ? "Running" : "Stopped")</span>
                 </div>
-            </div>
+                <div class="card-body">
+                    <div class="service-section mb-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong>Status:</strong>
+                            <span class="@statusClass">@statusMessage</span>
+                        </div>
+                        @if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            <div class="alert alert-danger mt-3">
+                                <i class="fas fa-exclamation-circle"></i> @errorMessage
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(successMessage))
+                        {
+                            <div class="alert alert-success mt-3">
+                                <i class="fas fa-check-circle"></i> @successMessage
+                            </div>
+                        }
+                    </div>
 
-            <hr />
+                    <hr />
 
-            <div class="d-flex justify-content-end my-3">
-                <button class="btn btn-success btn-sm mx-1" @onclick="StartService" disabled="@isServiceRunning">Start</button>
-                <button class="btn btn-danger btn-sm mx-1" @onclick="StopService" disabled="@(!isServiceRunning)">Stop</button>
+                    <div class="d-flex justify-content-end my-4">
+                        <button class="btn btn-success btn-sm mx-1" @onclick="StartService" disabled="@isServiceRunning">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                        <button class="btn btn-danger btn-sm mx-1" @onclick="StopService" disabled="@(!isServiceRunning)">
+                            <i class="fas fa-stop"></i> Stop
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 @code {
-    private string statusMessage = "Service is stopped.";
-    private string statusClass = "text-danger";
     private bool isServiceRunning = false;
+    private string statusMessage = "Service not started.";
+    private string statusClass = "text-info";
+    private string errorMessage = string.Empty;
+    private string successMessage = string.Empty;
 
-    // Inject the PushSmsJob service
-    [Inject] PushSmsJob PushSmsJob { get; set; }
+// Inject the PushSmsJob (if registered as Singleton or Scoped)
+    [Inject] private PushSmsJob _pushSmsJob { get; set; }
 
     private async Task StartService()
     {
-        await PushSmsJob.StartAsync(new CancellationToken());
-        isServiceRunning = true;
-        statusMessage = "Service is running.";
-        statusClass = "text-success";
+        try
+        {
+            errorMessage = string.Empty;
+            successMessage = string.Empty;
+
+            // Ensure the configuration is loaded by directly calling StartAsync
+            await _pushSmsJob.StartAsync(new CancellationToken());
+
+            // Now check if the configuration is loaded after calling StartAsync
+            if (!_pushSmsJob.IsConfigLoaded)
+            {
+                errorMessage = _pushSmsJob.ErrorMessage ?? "Database configuration is required. Please configure the database first.";
+                statusMessage = "Service failed to start.";
+                statusClass = "text-warning";
+                return;
+            }
+
+            // Logic to update the UI
+            isServiceRunning = true;
+            statusMessage = "Service started successfully.";
+            statusClass = "text-success";
+            successMessage = "The SMS service is now running.";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to start service: {ex.Message}";
+            statusMessage = "Service failed to start.";
+            statusClass = "text-danger";
+        }
     }
 
     private async Task StopService()
     {
-        await PushSmsJob.StopAsync(new CancellationToken());
-        isServiceRunning = false;
-        statusMessage = "Service is stopped.";
-        statusClass = "text-danger";
+        try
+        {
+            errorMessage = string.Empty;
+            successMessage = string.Empty;
+
+            isServiceRunning = false;
+            statusMessage = "Service stopped successfully.";
+            statusClass = "text-warning";
+            successMessage = "The SMS service has been stopped.";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to stop service: {ex.Message}";
+            statusMessage = "Service failed to stop.";
+            statusClass = "text-danger";
+        }
     }
 }

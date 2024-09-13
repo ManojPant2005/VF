@@ -27,10 +27,6 @@ public class DatabaseConfigService
                     throw new InvalidOperationException("Failed to deserialize the configuration.");
                 }
 
-                // Logging values to debug
-                Console.WriteLine($"ConnectionString: {config.ConnectionString}");
-                Console.WriteLine($"TableName: {config.TableName}");
-
                 ConnectionString = config.ConnectionString;
                 TableName = config.TableName;
             }
@@ -46,7 +42,6 @@ public class DatabaseConfigService
         }
     }
 
-    // Generate the connection string and validate it's set
     public string GenerateConnectionString()
     {
         if (string.IsNullOrWhiteSpace(ConnectionString))
