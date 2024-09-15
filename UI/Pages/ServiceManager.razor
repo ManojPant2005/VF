@@ -1,5 +1,9 @@
 ﻿@page "/service-control"
+@using System.Data.SqlClient
 @using System.Threading
+@inject IConfiguration Configuration
+@using System.Threading.Tasks
+@using Microsoft.Extensions.Configuration
 @using UI.Jobs
 @inject PushSmsJob PushSmsJob
 
@@ -11,29 +15,21 @@
                     <h3 class="mb-0">
                         <i class="fas fa-cogs"></i> Service Control
                     </h3>
-                    <span class="badge badge-pill badge-light">@(isServiceRunning ? "Running" : "Stopped")</span>
+                    <span class="badge badge-pill badge-light">@statusMessage</span>
                 </div>
                 <div class="card-body">
-                    <div class="service-section mb-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <strong>Status:</strong>
-                            <span class="@statusClass">@statusMessage</span>
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i> @errorMessage
                         </div>
-                        @if (!string.IsNullOrEmpty(errorMessage))
-                        {
-                            <div class="alert alert-danger mt-3">
-                                <i class="fas fa-exclamation-circle"></i> @errorMessage
-                            </div>
-                        }
-                        @if (!string.IsNullOrEmpty(successMessage))
-                        {
-                            <div class="alert alert-success mt-3">
-                                <i class="fas fa-check-circle"></i> @successMessage
-                            </div>
-                        }
-                    </div>
-
-                    <hr />
+                    }
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> @successMessage
+                        </div>
+                    }
 
                     <div class="d-flex justify-content-end my-4">
                         <button class="btn btn-success btn-sm mx-1" @onclick="StartService" disabled="@isServiceRunning">
@@ -42,6 +38,13 @@
                         <button class="btn btn-danger btn-sm mx-1" @onclick="StopService" disabled="@(!isServiceRunning)">
                             <i class="fas fa-stop"></i> Stop
                         </button>
+                    </div>
+
+                    <!-- Message Counts Section -->
+                    <h5>Message Counts (07:00 AM - 07:00 PM)</h5>
+                    <div class="alert alert-info">
+                        <strong>Processed Messages: </strong> @processedMessages <br />
+                        <strong>Unsent Messages: </strong> @unsentMessages
                     </div>
                 </div>
             </div>
@@ -52,12 +55,15 @@
 @code {
     private bool isServiceRunning = false;
     private string statusMessage = "Service not started.";
-    private string statusClass = "text-info";
     private string errorMessage = string.Empty;
     private string successMessage = string.Empty;
+    private int processedMessages = 0;
+    private int unsentMessages = 0;
 
-// Inject the PushSmsJob (if registered as Singleton or Scoped)
-    [Inject] private PushSmsJob _pushSmsJob { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        await GetMessageCounts();
+    }
 
     private async Task StartService()
     {
@@ -66,29 +72,27 @@
             errorMessage = string.Empty;
             successMessage = string.Empty;
 
-            // Ensure the configuration is loaded by directly calling StartAsync
-            await _pushSmsJob.StartAsync(new CancellationToken());
+            // Start the PushSmsJob service
+            await PushSmsJob.StartAsync(new CancellationToken());
 
-            // Now check if the configuration is loaded after calling StartAsync
-            if (!_pushSmsJob.IsConfigLoaded)
+            if (!PushSmsJob.IsConfigLoaded)
             {
-                errorMessage = _pushSmsJob.ErrorMessage ?? "Database configuration is required. Please configure the database first.";
+                errorMessage = PushSmsJob.ErrorMessage ?? "Database configuration is missing.";
                 statusMessage = "Service failed to start.";
-                statusClass = "text-warning";
                 return;
             }
 
-            // Logic to update the UI
             isServiceRunning = true;
-            statusMessage = "Service started successfully.";
-            statusClass = "text-success";
-            successMessage = "The SMS service is now running.";
+            statusMessage = "Service is running.";
+            successMessage = "The SMS service started successfully.";
+
+            // Fetch message counts after starting the service
+            await GetMessageCounts();
         }
         catch (Exception ex)
         {
             errorMessage = $"Failed to start service: {ex.Message}";
             statusMessage = "Service failed to start.";
-            statusClass = "text-danger";
         }
     }
 
@@ -99,16 +103,63 @@
             errorMessage = string.Empty;
             successMessage = string.Empty;
 
+            // Stop the PushSmsJob service
+            await PushSmsJob.StopAsync(new CancellationToken());
+
             isServiceRunning = false;
             statusMessage = "Service stopped successfully.";
-            statusClass = "text-warning";
             successMessage = "The SMS service has been stopped.";
         }
         catch (Exception ex)
         {
             errorMessage = $"Failed to stop service: {ex.Message}";
             statusMessage = "Service failed to stop.";
-            statusClass = "text-danger";
+        }
+    }
+
+    private async Task GetMessageCounts()
+    {
+        try
+        {
+            // Fetching connection string from dbconfig.json via Configuration
+            var connectionString = Configuration.GetValue<string>("ConnectionString");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                errorMessage = "Connection string is not configured.";
+                return;
+            }
+
+            // Define your SQL query here to get message counts
+            var query = "SELECT COUNT(*) AS ProcessedMessages FROM MyTable WHERE SMS_transmitted_on IS NOT NULL;" +
+                        "SELECT COUNT(*) AS UnsentMessages FROM MyTable WHERE SMS_transmitted_on IS NULL;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (reader.HasRows)
+                        {
+                            // Read first result set for processed messages
+                            await reader.ReadAsync();
+                            processedMessages = reader.GetInt32(0);
+
+                            // Move to the next result set for unsent messages
+                            await reader.NextResultAsync();
+                            await reader.ReadAsync();
+                            unsentMessages = reader.GetInt32(0);
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error fetching message counts: {ex.Message}";
         }
     }
 }

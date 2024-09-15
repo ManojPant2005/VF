@@ -496,3 +496,164 @@ Login failed for user 'MP\pantm'.
 13-09-2024 21:02:27: SMS Service started successfully.
 13-09-2024 21:11:01: SMS Service started successfully.
 13-09-2024 21:11:11: SMS Service started successfully.
+14-09-2024 11:45:45: SMS Service started successfully.
+14-09-2024 11:46:02: SMS Service started successfully.
+14-09-2024 14:09:40: SMS Service started successfully.
+14-09-2024 20:53:40: SMS Service started successfully.
+15-09-2024 00:03:23: SMS Service started successfully.
+15-09-2024 00:03:53: SMS Service started successfully.
+15-09-2024 00:05:10: SMS Service started successfully.
+15-09-2024 00:09:16: SMS Service started successfully.
+15-09-2024 00:11:21: SMS Service started successfully.
+15-09-2024 00:11:27: SMS Service cancellation requested. Stopping the Push SMS Job.
+15-09-2024 00:11:27: Push SMS Job has stopped.
+15-09-2024 00:11:28: SMS Service started successfully.
+15-09-2024 00:11:30: SMS Service cancellation requested. Stopping the Push SMS Job.
+15-09-2024 00:11:30: Push SMS Job has stopped.
+15-09-2024 00:16:33: SMS Service started successfully.
+15-09-2024 00:16:42: SMS Service started successfully.
+15-09-2024 00:16:44: SMS Service cancellation requested. Stopping the Push SMS Job.
+15-09-2024 00:16:44: Push SMS Job has stopped.
+15-09-2024 00:16:49: SMS Service started successfully.
+15-09-2024 00:17:56: SMS Service cancellation requested. Stopping the Push SMS Job.
+15-09-2024 00:17:56: Push SMS Job has stopped.
+15-09-2024 00:19:55: SMS Service started successfully.
+15-09-2024 00:20:03: SMS Service started successfully.
+15-09-2024 00:20:05: SMS Service cancellation requested. Stopping the Push SMS Job.
+15-09-2024 00:20:05: Push SMS Job has stopped.
+15-09-2024 00:20:46: SMS Service started successfully.
+15-09-2024 00:22:33: SMS Service started successfully.
+15-09-2024 00:22:42: SMS Service started successfully.
+15-09-2024 00:22:47: SMS Service cancellation requested. Stopping the Push SMS Job.
+15-09-2024 00:22:47: Push SMS Job has stopped.
+15-09-2024 09:36:40: SMS Service started successfully.
+15-09-2024 09:36:41: Message ID 1 sent to 1234567890 at 15-09-2024 09:36:41: Test message 1
+15-09-2024 09:36:41: Message ID 2 sent to 0987654321 at 15-09-2024 09:36:41: Test message 2
+15-09-2024 09:36:41: Message ID 3 sent to 1111111111 at 15-09-2024 09:36:41: Test message 3
+15-09-2024 09:36:41: Message ID 4 sent to 2222222222 at 15-09-2024 09:36:41: Test message 4
+15-09-2024 09:36:41: Message ID 5 sent to 3333333333 at 15-09-2024 09:36:41: Test message 5
+15-09-2024 09:36:41: Message ID 6 sent to 4444444444 at 15-09-2024 09:36:41: Test message 6
+15-09-2024 09:36:41: Message ID 7 sent to 5555555555 at 15-09-2024 09:36:41: Test message 7
+15-09-2024 09:36:41: Message ID 8 sent to 6666666666 at 15-09-2024 09:36:41: Test message 8
+15-09-2024 09:36:41: Message ID 9 sent to 7777777777 at 15-09-2024 09:36:41: Test message 9
+15-09-2024 09:36:41: Message ID 10 sent to 8888888888 at 15-09-2024 09:36:41: Test message 10
+15-09-2024 09:36:41: Message ID 11 sent to 9999999999 at 15-09-2024 09:36:41: Test message 11
+15-09-2024 09:36:41: Message ID 12 sent to 1010101010 at 15-09-2024 09:36:41: Test message 12
+15-09-2024 09:36:41: Message ID 13 sent to 1212121212 at 15-09-2024 09:36:41: Test message 13
+15-09-2024 09:36:41: Message ID 14 sent to 1313131313 at 15-09-2024 09:36:41: Test message 14
+15-09-2024 09:36:41: Message ID 15 sent to 1414141414 at 15-09-2024 09:36:41: Test message 15
+15-09-2024 09:36:41: Message ID 16 sent to 1515151515 at 15-09-2024 09:36:41: Test message 16
+15-09-2024 09:36:41: Message ID 17 sent to 1616161616 at 15-09-2024 09:36:41: Test message 17
+15-09-2024 09:36:41: Message ID 18 sent to 1717171717 at 15-09-2024 09:36:41: Test message 18
+15-09-2024 09:36:41: Message ID 19 sent to 1818181818 at 15-09-2024 09:36:41: Test message 19
+15-09-2024 09:36:41: Message ID 20 sent to 1919191919 at 15-09-2024 09:36:41: Test message 20
+15-09-2024 09:36:41: Message ID 21 sent to 2020202020 at 15-09-2024 09:36:41: Test message 21
+15-09-2024 09:36:41: Message ID 22 sent to 2121212121 at 15-09-2024 09:36:41: Test message 22
+15-09-2024 09:36:41: Message ID 23 sent to 2222222222 at 15-09-2024 09:36:41: Test message 23
+15-09-2024 09:36:41: Message ID 24 sent to 2323232323 at 15-09-2024 09:36:41: Test message 24
+15-09-2024 09:36:41: Message ID 25 sent to 2424242424 at 15-09-2024 09:36:41: Test message 25
+15-09-2024 09:36:41: Message ID 26 sent to 2525252525 at 15-09-2024 09:36:41: Test message 26
+15-09-2024 09:36:41: Message ID 27 sent to 2626262626 at 15-09-2024 09:36:41: Test message 27
+15-09-2024 09:36:41: Message ID 28 sent to 2727272727 at 15-09-2024 09:36:41: Test message 28
+15-09-2024 09:36:41: Message ID 29 sent to 2828282828 at 15-09-2024 09:36:41: Test message 29
+15-09-2024 09:36:41: Message ID 30 sent to 2929292929 at 15-09-2024 09:36:41: Test message 30
+15-09-2024 09:37:10: SMS Service started successfully.
+15-09-2024 09:37:23: SMS Service cancellation requested. Stopping the Push SMS Job.
+15-09-2024 09:37:23: Push SMS Job has stopped.
+15-09-2024 09:37:39: Message ID 31 sent to 1234567890 at 15-09-2024 09:37:39: Test message 1
+15-09-2024 09:37:39: Message ID 32 sent to 0987654321 at 15-09-2024 09:37:39: Test message 2
+15-09-2024 09:37:39: Message ID 33 sent to 1111111111 at 15-09-2024 09:37:39: Test message 3
+15-09-2024 09:37:39: Message ID 34 sent to 2222222222 at 15-09-2024 09:37:39: Test message 4
+15-09-2024 09:37:39: Message ID 35 sent to 3333333333 at 15-09-2024 09:37:39: Test message 5
+15-09-2024 09:37:39: Message ID 36 sent to 4444444444 at 15-09-2024 09:37:39: Test message 6
+15-09-2024 09:37:39: Message ID 37 sent to 5555555555 at 15-09-2024 09:37:39: Test message 7
+15-09-2024 09:37:39: Message ID 38 sent to 6666666666 at 15-09-2024 09:37:39: Test message 8
+15-09-2024 09:37:39: Message ID 39 sent to 7777777777 at 15-09-2024 09:37:39: Test message 9
+15-09-2024 09:37:39: Message ID 40 sent to 8888888888 at 15-09-2024 09:37:39: Test message 10
+15-09-2024 09:37:39: Message ID 41 sent to 9999999999 at 15-09-2024 09:37:39: Test message 11
+15-09-2024 09:37:39: Message ID 42 sent to 1010101010 at 15-09-2024 09:37:39: Test message 12
+15-09-2024 09:37:39: Message ID 43 sent to 1212121212 at 15-09-2024 09:37:39: Test message 13
+15-09-2024 09:37:39: Message ID 44 sent to 1313131313 at 15-09-2024 09:37:39: Test message 14
+15-09-2024 09:37:39: Message ID 45 sent to 1414141414 at 15-09-2024 09:37:39: Test message 15
+15-09-2024 09:37:39: Message ID 46 sent to 1515151515 at 15-09-2024 09:37:39: Test message 16
+15-09-2024 09:37:39: Message ID 47 sent to 1616161616 at 15-09-2024 09:37:39: Test message 17
+15-09-2024 09:37:39: Message ID 48 sent to 1717171717 at 15-09-2024 09:37:39: Test message 18
+15-09-2024 09:37:39: Message ID 49 sent to 1818181818 at 15-09-2024 09:37:39: Test message 19
+15-09-2024 09:37:39: Message ID 50 sent to 1919191919 at 15-09-2024 09:37:39: Test message 20
+15-09-2024 09:37:39: Message ID 51 sent to 2020202020 at 15-09-2024 09:37:39: Test message 21
+15-09-2024 09:37:39: Message ID 52 sent to 2121212121 at 15-09-2024 09:37:39: Test message 22
+15-09-2024 09:37:39: Message ID 53 sent to 2222222222 at 15-09-2024 09:37:39: Test message 23
+15-09-2024 09:37:39: Message ID 54 sent to 2323232323 at 15-09-2024 09:37:39: Test message 24
+15-09-2024 09:37:39: Message ID 55 sent to 2424242424 at 15-09-2024 09:37:39: Test message 25
+15-09-2024 09:37:39: Message ID 56 sent to 2525252525 at 15-09-2024 09:37:39: Test message 26
+15-09-2024 09:37:39: Message ID 57 sent to 2626262626 at 15-09-2024 09:37:39: Test message 27
+15-09-2024 09:37:39: Message ID 58 sent to 2727272727 at 15-09-2024 09:37:39: Test message 28
+15-09-2024 09:37:39: Message ID 59 sent to 2828282828 at 15-09-2024 09:37:39: Test message 29
+15-09-2024 09:37:39: Message ID 60 sent to 2929292929 at 15-09-2024 09:37:39: Test message 30
+15-09-2024 09:41:10: SMS Service started successfully.
+15-09-2024 09:41:10: Message ID 61 sent to 1234567890 at 15-09-2024 09:41:10: Test message 1
+15-09-2024 09:41:10: Message ID 62 sent to 0987654321 at 15-09-2024 09:41:10: Test message 2
+15-09-2024 09:41:10: Message ID 63 sent to 1111111111 at 15-09-2024 09:41:10: Test message 3
+15-09-2024 09:41:10: Message ID 64 sent to 2222222222 at 15-09-2024 09:41:10: Test message 4
+15-09-2024 09:41:10: Message ID 65 sent to 3333333333 at 15-09-2024 09:41:10: Test message 5
+15-09-2024 09:41:10: Message ID 66 sent to 4444444444 at 15-09-2024 09:41:10: Test message 6
+15-09-2024 09:41:10: Message ID 67 sent to 5555555555 at 15-09-2024 09:41:10: Test message 7
+15-09-2024 09:41:10: Message ID 68 sent to 6666666666 at 15-09-2024 09:41:10: Test message 8
+15-09-2024 09:41:10: Message ID 69 sent to 7777777777 at 15-09-2024 09:41:10: Test message 9
+15-09-2024 09:41:10: Message ID 70 sent to 8888888888 at 15-09-2024 09:41:10: Test message 10
+15-09-2024 09:41:10: Message ID 71 sent to 9999999999 at 15-09-2024 09:41:10: Test message 11
+15-09-2024 09:41:10: Message ID 72 sent to 1010101010 at 15-09-2024 09:41:10: Test message 12
+15-09-2024 09:41:10: Message ID 73 sent to 1212121212 at 15-09-2024 09:41:10: Test message 13
+15-09-2024 09:41:10: Message ID 74 sent to 1313131313 at 15-09-2024 09:41:10: Test message 14
+15-09-2024 09:41:10: Message ID 75 sent to 1414141414 at 15-09-2024 09:41:10: Test message 15
+15-09-2024 09:41:10: Message ID 76 sent to 1515151515 at 15-09-2024 09:41:10: Test message 16
+15-09-2024 09:41:10: Message ID 77 sent to 1616161616 at 15-09-2024 09:41:10: Test message 17
+15-09-2024 09:41:10: Message ID 78 sent to 1717171717 at 15-09-2024 09:41:10: Test message 18
+15-09-2024 09:41:10: Message ID 79 sent to 1818181818 at 15-09-2024 09:41:10: Test message 19
+15-09-2024 09:41:10: Message ID 80 sent to 1919191919 at 15-09-2024 09:41:10: Test message 20
+15-09-2024 09:41:10: Message ID 81 sent to 2020202020 at 15-09-2024 09:41:10: Test message 21
+15-09-2024 09:41:10: Message ID 82 sent to 2121212121 at 15-09-2024 09:41:10: Test message 22
+15-09-2024 09:41:10: Message ID 83 sent to 2222222222 at 15-09-2024 09:41:10: Test message 23
+15-09-2024 09:41:10: Message ID 84 sent to 2323232323 at 15-09-2024 09:41:10: Test message 24
+15-09-2024 09:41:10: Message ID 85 sent to 2424242424 at 15-09-2024 09:41:10: Test message 25
+15-09-2024 09:41:10: Message ID 86 sent to 2525252525 at 15-09-2024 09:41:10: Test message 26
+15-09-2024 09:41:10: Message ID 87 sent to 2626262626 at 15-09-2024 09:41:10: Test message 27
+15-09-2024 09:41:10: Message ID 88 sent to 2727272727 at 15-09-2024 09:41:10: Test message 28
+15-09-2024 09:41:10: Message ID 89 sent to 2828282828 at 15-09-2024 09:41:10: Test message 29
+15-09-2024 09:41:10: Message ID 90 sent to 2929292929 at 15-09-2024 09:41:10: Test message 30
+15-09-2024 09:41:15: SMS Service cancellation requested. Stopping the Push SMS Job.
+15-09-2024 09:41:15: Push SMS Job has stopped.
+15-09-2024 09:42:39: Message ID 91 sent to 1234567890 at 15-09-2024 09:42:39: Test message 1
+15-09-2024 09:42:39: Message ID 92 sent to 0987654321 at 15-09-2024 09:42:39: Test message 2
+15-09-2024 09:42:39: Message ID 93 sent to 1111111111 at 15-09-2024 09:42:39: Test message 3
+15-09-2024 09:42:39: Message ID 94 sent to 2222222222 at 15-09-2024 09:42:39: Test message 4
+15-09-2024 09:42:39: Message ID 95 sent to 3333333333 at 15-09-2024 09:42:39: Test message 5
+15-09-2024 09:42:39: Message ID 96 sent to 4444444444 at 15-09-2024 09:42:39: Test message 6
+15-09-2024 09:42:39: Message ID 97 sent to 5555555555 at 15-09-2024 09:42:39: Test message 7
+15-09-2024 09:42:39: Message ID 98 sent to 6666666666 at 15-09-2024 09:42:39: Test message 8
+15-09-2024 09:42:39: Message ID 99 sent to 7777777777 at 15-09-2024 09:42:39: Test message 9
+15-09-2024 09:42:39: Message ID 100 sent to 8888888888 at 15-09-2024 09:42:39: Test message 10
+15-09-2024 09:42:39: Message ID 101 sent to 9999999999 at 15-09-2024 09:42:39: Test message 11
+15-09-2024 09:42:39: Message ID 102 sent to 1010101010 at 15-09-2024 09:42:39: Test message 12
+15-09-2024 09:42:39: Message ID 103 sent to 1212121212 at 15-09-2024 09:42:39: Test message 13
+15-09-2024 09:42:39: Message ID 104 sent to 1313131313 at 15-09-2024 09:42:39: Test message 14
+15-09-2024 09:42:39: Message ID 105 sent to 1414141414 at 15-09-2024 09:42:39: Test message 15
+15-09-2024 09:42:39: Message ID 106 sent to 1515151515 at 15-09-2024 09:42:39: Test message 16
+15-09-2024 09:42:39: Message ID 107 sent to 1616161616 at 15-09-2024 09:42:39: Test message 17
+15-09-2024 09:42:39: Message ID 108 sent to 1717171717 at 15-09-2024 09:42:39: Test message 18
+15-09-2024 09:42:39: Message ID 109 sent to 1818181818 at 15-09-2024 09:42:39: Test message 19
+15-09-2024 09:42:39: Message ID 110 sent to 1919191919 at 15-09-2024 09:42:39: Test message 20
+15-09-2024 09:42:39: Message ID 111 sent to 2020202020 at 15-09-2024 09:42:39: Test message 21
+15-09-2024 09:42:39: Message ID 112 sent to 2121212121 at 15-09-2024 09:42:39: Test message 22
+15-09-2024 09:42:39: Message ID 113 sent to 2222222222 at 15-09-2024 09:42:39: Test message 23
+15-09-2024 09:42:39: Message ID 114 sent to 2323232323 at 15-09-2024 09:42:39: Test message 24
+15-09-2024 09:42:39: Message ID 115 sent to 2424242424 at 15-09-2024 09:42:39: Test message 25
+15-09-2024 09:42:39: Message ID 116 sent to 2525252525 at 15-09-2024 09:42:39: Test message 26
+15-09-2024 09:42:39: Message ID 117 sent to 2626262626 at 15-09-2024 09:42:39: Test message 27
+15-09-2024 09:42:39: Message ID 118 sent to 2727272727 at 15-09-2024 09:42:39: Test message 28
+15-09-2024 09:42:39: Message ID 119 sent to 2828282828 at 15-09-2024 09:42:39: Test message 29
+15-09-2024 09:42:39: Message ID 120 sent to 2929292929 at 15-09-2024 09:42:39: Test message 30
+15-09-2024 09:44:22: SMS Service started successfully.
+15-09-2024 09:44:24: SMS Service cancellation requested. Stopping the Push SMS Job.
+15-09-2024 09:44:24: Push SMS Job has stopped.
+15-09-2024 10:11:34: SMS Service started successfully.

@@ -23,6 +23,8 @@ builder.Services.AddSingleton<WindowsServiceManager>(provider =>
     return new WindowsServiceManager(configuration, logger);
 });
 
+builder.Configuration.AddJsonFile("dbconfig.json", optional: true, reloadOnChange: true);
+
 // Register Database-related services
 builder.Services.AddSingleton<IDatabaseConfigurationService, SqlServerConfigurationService>();
 builder.Services.AddSingleton<SqlServerConfigurationService>();
