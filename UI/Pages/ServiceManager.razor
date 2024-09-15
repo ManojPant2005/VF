@@ -1,11 +1,11 @@
 ﻿@page "/service-control"
-@using System.Data.SqlClient
-@using System.Threading
-@inject IConfiguration Configuration
-@using System.Threading.Tasks
 @using Microsoft.Extensions.Configuration
+@using Blazored.LocalStorage
 @using UI.Jobs
+@inject ServiceController ServiceController
 @inject PushSmsJob PushSmsJob
+@inject IConfiguration Configuration
+@inject ILocalStorageService LocalStorage
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -16,6 +16,10 @@
                         <i class="fas fa-cogs"></i> Service Control
                     </h3>
                     <span class="badge badge-pill badge-light">@statusMessage</span>
+                    <div>
+                        <!-- Timer Display -->
+                        <span class="badge badge-light" style="font-size: 1.2em;">@currentTime</span>
+                    </div>
                 </div>
                 <div class="card-body">
                     @if (!string.IsNullOrEmpty(errorMessage))
@@ -41,8 +45,10 @@
                     </div>
 
                     <!-- Message Counts Section -->
-                    <h5>Message Counts (07:00 AM - 07:00 PM)</h5>
                     <div class="alert alert-info">
+                        <div style="text-align:center;">
+                            <h6><b>MESSAGE COUNTS (07:00 AM - 07:00 PM)</b></h6>
+                        </div>
                         <strong>Processed Messages: </strong> @processedMessages <br />
                         <strong>Unsent Messages: </strong> @unsentMessages
                     </div>
@@ -59,10 +65,41 @@
     private string successMessage = string.Empty;
     private int processedMessages = 0;
     private int unsentMessages = 0;
+    private string currentTime = DateTime.Now.ToString("HH:mm:ss");
 
     protected override async Task OnInitializedAsync()
     {
+        // Retrieve the saved service state from LocalStorage
+        isServiceRunning = await LocalStorage.GetItemAsync<bool>("isServiceRunning");
+        statusMessage = isServiceRunning ? "Service is running." : "Service not started.";
+
         await GetMessageCounts();
+
+        // Start a timer to periodically check service status and update current time
+        var statusTimer = new System.Timers.Timer(10000); // Check every 10 seconds
+        statusTimer.Elapsed += async (sender, e) => await CheckServiceStatus();
+        statusTimer.Start();
+
+        var timeTimer = new System.Timers.Timer(1000); // Update time every second
+        timeTimer.Elapsed += (sender, e) => UpdateTime();
+        timeTimer.Start();
+    }
+
+    private async Task CheckServiceStatus()
+    {
+        // Read the service status from LocalStorage
+        isServiceRunning = await LocalStorage.GetItemAsync<bool>("isServiceRunning");
+        statusMessage = isServiceRunning ? "Service is running." : "Service not started.";
+
+        // Ensure StateHasChanged is called on the UI thread
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+    private void UpdateTime()
+    {
+        // Update current time every second
+        currentTime = DateTime.Now.ToString("HH:mm:ss");
+        InvokeAsync(StateHasChanged);
     }
 
     private async Task StartService()
@@ -72,8 +109,8 @@
             errorMessage = string.Empty;
             successMessage = string.Empty;
 
-            // Start the PushSmsJob service
-            await PushSmsJob.StartAsync(new CancellationToken());
+            // Start the PushSmsJob service using ServiceController
+            await ServiceController.StartPushSmsJobAsync();
 
             if (!PushSmsJob.IsConfigLoaded)
             {
@@ -85,6 +122,9 @@
             isServiceRunning = true;
             statusMessage = "Service is running.";
             successMessage = "The SMS service started successfully.";
+
+            // Save the service state to LocalStorage
+            await LocalStorage.SetItemAsync("isServiceRunning", isServiceRunning);
 
             // Fetch message counts after starting the service
             await GetMessageCounts();
@@ -103,12 +143,15 @@
             errorMessage = string.Empty;
             successMessage = string.Empty;
 
-            // Stop the PushSmsJob service
-            await PushSmsJob.StopAsync(new CancellationToken());
+            // Stop the PushSmsJob service using ServiceController
+            await ServiceController.StopPushSmsJobAsync();
 
             isServiceRunning = false;
             statusMessage = "Service stopped successfully.";
             successMessage = "The SMS service has been stopped.";
+
+            // Save the service state to LocalStorage
+            await LocalStorage.SetItemAsync("isServiceRunning", isServiceRunning);
         }
         catch (Exception ex)
         {
@@ -121,7 +164,6 @@
     {
         try
         {
-            // Fetching connection string from dbconfig.json via Configuration
             var connectionString = Configuration.GetValue<string>("ConnectionString");
 
             if (string.IsNullOrEmpty(connectionString))
@@ -130,9 +172,8 @@
                 return;
             }
 
-            // Define your SQL query here to get message counts
-            var query = "SELECT COUNT(*) AS ProcessedMessages FROM MyTable WHERE SMS_transmitted_on IS NOT NULL;" +
-                        "SELECT COUNT(*) AS UnsentMessages FROM MyTable WHERE SMS_transmitted_on IS NULL;";
+            var query = "SELECT COUNT(*) FROM MyTable WHERE SMS_transmitted_on IS NOT NULL;" +
+                        "SELECT COUNT(*) FROM MyTable WHERE SMS_transmitted_on IS NULL;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -144,11 +185,9 @@
                     {
                         if (reader.HasRows)
                         {
-                            // Read first result set for processed messages
                             await reader.ReadAsync();
                             processedMessages = reader.GetInt32(0);
 
-                            // Move to the next result set for unsent messages
                             await reader.NextResultAsync();
                             await reader.ReadAsync();
                             unsentMessages = reader.GetInt32(0);
