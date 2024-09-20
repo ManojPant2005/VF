@@ -8,39 +8,36 @@ using System;
 using UI.Data;
 using UI.Jobs;
 using UI.Services;
-using System.ServiceProcess;
 using System.Net.Http;
 using System.Text.Json;
 using Blazored.LocalStorage;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Register essential services
+// Register services
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-// Register ServiceController with its dependencies
+// Graceful shutdown handling
+builder.Host.ConfigureServices(services =>
+{
+    services.Configure<HostOptions>(options =>
+    {
+        // timeout for graceful shutdown to avoid exceptions when stopping services
+        options.ShutdownTimeout = TimeSpan.FromSeconds(30);
+    });
+});
+
+// Register PushSmsJob and ensure it's only registered once
 builder.Services.AddSingleton<PushSmsJob>(provider =>
 {
     var databaseConfigService = provider.GetRequiredService<DatabaseConfigService>();
+    var logger = provider.GetRequiredService<ILogger<PushSmsJob>>();
     var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dbconfig.json");
-    return new PushSmsJob(databaseConfigService, configPath);
+
+    return new PushSmsJob(databaseConfigService, configPath, logger);
 });
 
-builder.Services.AddSingleton(async sp =>
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    var response = await httpClient.GetAsync("dbconfig.json");
-    response.EnsureSuccessStatusCode();
-    var json = await response.Content.ReadAsStringAsync();
-    var dbConfig = JsonSerializer.Deserialize<DbConfig>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-    return dbConfig;
-});
-
-builder.Configuration.AddJsonFile("dbconfig.json", optional: false, reloadOnChange: true);
-
-builder.Services.AddBlazoredLocalStorage();
 // Register ServiceController with PushSmsJob dependency
 builder.Services.AddSingleton<UI.Services.ServiceController>(provider =>
 {
@@ -55,17 +52,21 @@ builder.Services.AddSingleton<DatabaseConfigurationFactory>();
 builder.Services.AddSingleton<DatabaseConfigService>();
 builder.Services.AddSingleton<DatabaseService>();
 
-var configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "dbconfig.json");
-
-// Register PushSmsJob as a singleton
-builder.Services.AddSingleton<PushSmsJob>(provider =>
+// Load the DB configuration from a JSON file and register it as a service
+builder.Services.AddSingleton(async sp =>
 {
-    var databaseConfigService = provider.GetRequiredService<DatabaseConfigService>();
-    return new PushSmsJob(databaseConfigService, configPath);
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    var response = await httpClient.GetAsync("dbconfig.json");
+    response.EnsureSuccessStatusCode();
+    var json = await response.Content.ReadAsStringAsync();
+    var dbConfig = JsonSerializer.Deserialize<DbConfig>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    return dbConfig;
 });
 
-// Register ServiceController to manage services
-builder.Services.AddSingleton<UI.Services.ServiceController>();
+builder.Configuration.AddJsonFile("dbconfig.json", optional: false, reloadOnChange: true);
+
+// Register Blazored Local Storage
+builder.Services.AddBlazoredLocalStorage();
 
 // Register MVC for controllers (if you have API controllers or MVC views)
 builder.Services.AddControllersWithViews();

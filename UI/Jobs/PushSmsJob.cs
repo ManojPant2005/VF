@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Data.SqlClient;
 using System.IO;
@@ -12,99 +13,113 @@ namespace UI.Jobs
     {
         private readonly DatabaseConfigService _databaseConfigService;
         private readonly string _logFilePath = "D:\\IN\\VF\\VF_SMS.txt";
-        private readonly PeriodicTimer _periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(60));
+        private PeriodicTimer _periodicTimer;
         private bool _isConfigLoaded = false;
+        private bool _isRunning = false;
 
         private readonly string _configPath;
         public string ErrorMessage { get; private set; }
 
-        // Expose _isConfigLoaded with a public property
         public bool IsConfigLoaded => _isConfigLoaded;
-
+        private readonly ILogger<PushSmsJob> _logger;
+        public bool IsRunning => _isRunning;
         // Inject DatabaseConfigService and the config file path
-        public PushSmsJob(DatabaseConfigService databaseConfigService, string configPath)
+        public PushSmsJob(DatabaseConfigService databaseConfigService, string configPath, ILogger<PushSmsJob> logger)
         {
             _databaseConfigService = databaseConfigService;
             _configPath = configPath;
+            _logger = logger;
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
             try
             {
-                Console.WriteLine("Starting SMS Service...");
+                _isRunning = true;
+                _logger.LogInformation("Push SMS Service starting...");
 
                 // Load the configuration before starting the service
                 await _databaseConfigService.LoadConfigurationAsync(_configPath);
 
-                // Check if configuration is valid
                 if (string.IsNullOrEmpty(_databaseConfigService.ConnectionString))
                 {
                     throw new InvalidOperationException("Connection string is not set.");
                 }
 
                 _isConfigLoaded = true;
-                Console.WriteLine("Configuration loaded successfully.");
+                _logger.LogInformation("Configuration loaded successfully.");
 
-                // Now start the actual background service
                 await base.StartAsync(cancellationToken);
             }
             catch (FileNotFoundException)
             {
                 ErrorMessage = "Database configuration is missing. Please configure the database first.";
-                Console.WriteLine(ErrorMessage);
+                _logger.LogError(ErrorMessage);
             }
             catch (Exception ex)
             {
                 ErrorMessage = $"An error occurred while starting the service: {ex.Message}";
-                Console.WriteLine(ErrorMessage);
+                _logger.LogError(ErrorMessage);
             }
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            // If configuration is not loaded, return early without running the background job
             if (!_isConfigLoaded)
             {
                 LogMessage(ErrorMessage ?? "Configuration not loaded. Cannot start SMS processing.");
                 return;
             }
 
+            _logger.LogInformation("Push SMS Job is running.");
+
             try
             {
-                Console.WriteLine("SMS Service is starting.");
-                LogMessage("SMS Service started successfully.");
+                // Initialize PeriodicTimer
+                _periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(60));
 
-                while (!stoppingToken.IsCancellationRequested)
+                // Main processing loop
+                while (await _periodicTimer.WaitForNextTickAsync(stoppingToken))
                 {
-                    // Process SMS messages
-                    ProcessSmsMessages();
+                    // Check if cancellation is requested
+                    stoppingToken.ThrowIfCancellationRequested();
 
-                    // Wait for the next interval
-                    await _periodicTimer.WaitForNextTickAsync(stoppingToken);
+                    // Safely process SMS messages
+                    try
+                    {
+                        ProcessSmsMessages();
+                    }
+                    catch (Exception smsEx)
+                    {
+                        _logger.LogError($"Error while processing SMS messages: {smsEx.Message}");
+                        LogMessage($"Error while processing SMS messages: {smsEx.Message}");
+                        // Optionally, you can rethrow or handle this error depending on your needs.
+                    }
                 }
             }
             catch (OperationCanceledException)
             {
-                Console.WriteLine("SMS Service cancellation requested.");
-                LogMessage("SMS Service cancellation requested. Stopping the Push SMS Job.");
+                _logger.LogInformation("Push SMS Job cancellation requested.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                _logger.LogError($"An unexpected error occurred: {ex.Message}");
                 LogMessage($"An unexpected error occurred: {ex.Message}");
             }
             finally
             {
-                Console.WriteLine("SMS Service has stopped.");
+                _logger.LogInformation("Push SMS Job has stopped.");
                 LogMessage("Push SMS Job has stopped.");
+
+                // Properly dispose of the timer when done
+                _periodicTimer?.Dispose();
             }
         }
 
         private void ProcessSmsMessages()
         {
             string connectionString = _databaseConfigService.GenerateConnectionString();
-            Console.WriteLine($"Using Connection String: {connectionString}");
+            _logger.LogInformation($"Using Connection String: {connectionString}");
 
             try
             {
@@ -126,7 +141,7 @@ namespace UI.Jobs
                                 string messageText = reader.GetString(2);
 
                                 string logMessage = $"Message ID {smsId} sent to {mobileNumber} at {DateTime.Now}: {messageText}";
-                                Console.WriteLine(logMessage);
+                                _logger.LogInformation(logMessage);
                                 LogMessage(logMessage);
 
                                 // Update SMS_transmitted_on
@@ -138,7 +153,7 @@ namespace UI.Jobs
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error processing SMS messages: {ex.Message}");
+                _logger.LogError($"Error processing SMS messages: {ex.Message}");
                 LogMessage($"Error processing SMS messages: {ex.Message}");
             }
         }
@@ -162,23 +177,32 @@ namespace UI.Jobs
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error updating SMS record {smsId}: {ex.Message}");
+                _logger.LogError($"Error updating SMS record {smsId}: {ex.Message}");
                 LogMessage($"Error updating SMS record {smsId}: {ex.Message}");
             }
         }
 
         private void LogMessage(string message)
         {
-            using (StreamWriter writer = new StreamWriter(_logFilePath, true))
+            try
             {
-                writer.WriteLine($"{DateTime.Now}: {message}");
+                using (StreamWriter writer = new StreamWriter(_logFilePath, true))
+                {
+                    writer.WriteLine($"{DateTime.Now}: {message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error logging message to file: {ex.Message}");
             }
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        public override async Task StopAsync(CancellationToken cancellationToken)
         {
-            Console.WriteLine("Stopping SMS Service...");
-            return base.StopAsync(cancellationToken);
+            _isRunning = false;
+            _logger.LogInformation("Push SMS Service stopping...");
+            _periodicTimer?.Dispose(); // Dispose of the timer to stop further execution
+            await base.StopAsync(cancellationToken);
         }
     }
 }

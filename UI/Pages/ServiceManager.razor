@@ -16,10 +16,7 @@
                         <i class="fas fa-cogs"></i> Service Control
                     </h3>
                     <span class="badge badge-pill badge-light">@statusMessage</span>
-                    <div>
-                        <!-- Timer Display -->
-                        <span class="badge badge-light" style="font-size: 1.2em;">@currentTime</span>
-                    </div>
+
                 </div>
                 <div class="card-body">
                     @if (!string.IsNullOrEmpty(errorMessage))
@@ -47,7 +44,7 @@
                     <!-- Message Counts Section -->
                     <div class="alert alert-info">
                         <div style="text-align:center;">
-                            <h6><b>MESSAGE COUNTS (07:00 AM - 07:00 PM)</b></h6>
+                            <h6><b>@currentTime&nbsp;&nbsp;&nbsp;MESSAGE COUNTS (07:00 AM - 07:00 PM) </b></h6>
                         </div>
                         <strong>Processed Messages: </strong> @processedMessages <br />
                         <strong>Unsent Messages: </strong> @unsentMessages
@@ -69,37 +66,99 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Retrieve the saved service state from LocalStorage
-        isServiceRunning = await LocalStorage.GetItemAsync<bool>("isServiceRunning");
-        statusMessage = isServiceRunning ? "Service is running." : "Service not started.";
+        // Check and set the service state from local storage
+        await SetServiceStateFromLocalStorage();
 
+        // Reset message counts if it's a new day
+        await CheckAndResetDailyCounts();
+
+        // Fetch the message counts and start the timers
         await GetMessageCounts();
 
-        // Start a timer to periodically check service status and update current time
+        // Start timers for checking service status and updating current time
+        StartStatusTimer();
+        StartTimeTimer();
+    }
+
+    private async Task CheckAndResetDailyCounts()
+    {
+        // Get today's date
+        var today = DateTime.Now.Date;
+
+        // Check the last date from local storage
+        var lastCheckedDate = await LocalStorage.GetItemAsync<DateTime?>("lastCheckedDate");
+
+        if (!lastCheckedDate.HasValue || lastCheckedDate.Value != today)
+        {
+            // New day: Reset the message counts
+            processedMessages = 0;
+            unsentMessages = 0;
+
+            // Save today's date to local storage
+            await LocalStorage.SetItemAsync("lastCheckedDate", today);
+        }
+    }
+
+    private async Task SetServiceStateFromLocalStorage()
+    {
+        bool? lastKnownState = await LocalStorage.GetItemAsync<bool?>("isServiceRunning");
+
+        if (lastKnownState.HasValue)
+        {
+            isServiceRunning = lastKnownState.Value;
+            statusMessage = isServiceRunning ? "Service is running." : "Service not started.";
+        }
+        else
+        {
+            // Default state if no previous state is found
+            isServiceRunning = false;
+            statusMessage = "Service not started.";
+        }
+    }
+
+    private void StartStatusTimer()
+    {
         var statusTimer = new System.Timers.Timer(10000); // Check every 10 seconds
         statusTimer.Elapsed += async (sender, e) => await CheckServiceStatus();
         statusTimer.Start();
+    }
 
+    private void StartTimeTimer()
+    {
         var timeTimer = new System.Timers.Timer(1000); // Update time every second
         timeTimer.Elapsed += (sender, e) => UpdateTime();
         timeTimer.Start();
     }
 
-    private async Task CheckServiceStatus()
-    {
-        // Read the service status from LocalStorage
-        isServiceRunning = await LocalStorage.GetItemAsync<bool>("isServiceRunning");
-        statusMessage = isServiceRunning ? "Service is running." : "Service not started.";
-
-        // Ensure StateHasChanged is called on the UI thread
-        await InvokeAsync(() => StateHasChanged());
-    }
-
     private void UpdateTime()
     {
-        // Update current time every second
-        currentTime = DateTime.Now.ToString("HH:mm:ss");
-        InvokeAsync(StateHasChanged);
+        currentTime = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"); // Include today's date with time
+        InvokeAsync(StateHasChanged); // Ensure the UI is updated
+    }
+
+
+    private async Task CheckServiceStatus()
+    {
+        // Check if the service is running internally
+        bool isRunning = CheckServiceInternalStatus();
+
+        if (isRunning != isServiceRunning)
+        {
+            isServiceRunning = isRunning;
+            statusMessage = isServiceRunning ? "Service is running." : "Service not started.";
+            await LocalStorage.SetItemAsync("isServiceRunning", isServiceRunning);
+            InvokeAsync(StateHasChanged); // Ensure the UI is updated
+        }
+
+        // Optionally, update message counts periodically
+        await GetMessageCounts();
+    }
+
+    private bool CheckServiceInternalStatus()
+    {
+        // Implement your logic to determine if the service is actually running
+        // For example, check some in-memory state or other flags
+        return PushSmsJob.IsRunning; // Replace with actual status check
     }
 
     private async Task StartService()
@@ -109,7 +168,7 @@
             errorMessage = string.Empty;
             successMessage = string.Empty;
 
-            // Start the PushSmsJob service using ServiceController
+            // Start the PushSmsJob service
             await ServiceController.StartPushSmsJobAsync();
 
             if (!PushSmsJob.IsConfigLoaded)
@@ -143,7 +202,7 @@
             errorMessage = string.Empty;
             successMessage = string.Empty;
 
-            // Stop the PushSmsJob service using ServiceController
+            // Stop the PushSmsJob service
             await ServiceController.StopPushSmsJobAsync();
 
             isServiceRunning = false;
@@ -165,15 +224,24 @@
         try
         {
             var connectionString = Configuration.GetValue<string>("ConnectionString");
+            var tableName = Configuration.GetValue<string>("TableName");
 
-            if (string.IsNullOrEmpty(connectionString))
+            if (string.IsNullOrEmpty(connectionString) || string.IsNullOrEmpty(tableName))
             {
-                errorMessage = "Connection string is not configured.";
+                errorMessage = "Connection string or table name is not configured.";
                 return;
             }
 
-            var query = "SELECT COUNT(*) FROM MyTable WHERE SMS_transmitted_on IS NOT NULL;" +
-                        "SELECT COUNT(*) FROM MyTable WHERE SMS_transmitted_on IS NULL;";
+            // SQL query with dynamic table name
+            var query = $@"
+            SELECT COUNT(*) FROM {tableName}
+            WHERE SMS_transmitted_on IS NOT NULL
+            AND CONVERT(DATE, SMS_transmitted_on) = CONVERT(DATE, GETDATE());
+
+
+           SELECT COUNT(*) FROM {tableName}
+           WHERE SMS_transmitted_on IS NULL;
+        ";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -183,14 +251,27 @@
                 {
                     using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        if (reader.HasRows)
+                        // Check if there are rows for the first result (Processed Messages)
+                        if (await reader.ReadAsync())
                         {
-                            await reader.ReadAsync();
                             processedMessages = reader.GetInt32(0);
+                        }
+                        else
+                        {
+                            processedMessages = 0; // Default if no rows
+                        }
 
-                            await reader.NextResultAsync();
-                            await reader.ReadAsync();
-                            unsentMessages = reader.GetInt32(0);
+                        // Move to the second result set (Unsent Messages)
+                        if (await reader.NextResultAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                unsentMessages = reader.GetInt32(0);
+                            }
+                            else
+                            {
+                                unsentMessages = 0; // Default if no rows
+                            }
                         }
                     }
                 }
