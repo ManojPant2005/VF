@@ -104,9 +104,9 @@ namespace UI.Services
             }
             catch (Exception ex)
             {
-                // Log and handle the exception
                 return false;
             }
         }
     }
+
 }

@@ -8,7 +8,7 @@ public class DatabaseConfigService
     public string ConnectionString { get; set; }
     public string TableName { get; set; }
 
-    // Load the configuration from a given file path
+    // Load the configuration 
     public async Task LoadConfigurationAsync(string configPath)
     {
         if (File.Exists(configPath))

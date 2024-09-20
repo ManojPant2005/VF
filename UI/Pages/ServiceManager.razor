@@ -44,7 +44,7 @@
                     <!-- Message Counts Section -->
                     <div class="alert alert-info">
                         <div style="text-align:center;">
-                            <h6><b>@currentTime&nbsp;&nbsp;&nbsp;MESSAGE COUNTS (07:00 AM - 07:00 PM) </b></h6>
+                            <h6><b>@currentTime (07:00 AM - 07:00 PM) </b></h6>
                         </div>
                         <strong>Processed Messages: </strong> @processedMessages <br />
                         <strong>Unsent Messages: </strong> @unsentMessages
@@ -66,13 +66,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Check and set the service state from local storage
         await SetServiceStateFromLocalStorage();
 
         // Reset message counts if it's a new day
         await CheckAndResetDailyCounts();
 
-        // Fetch the message counts and start the timers
+        // Fetch message count  | start the timers
         await GetMessageCounts();
 
         // Start timers for checking service status and updating current time
@@ -118,7 +117,7 @@
 
     private void StartStatusTimer()
     {
-        var statusTimer = new System.Timers.Timer(10000); // Check every 10 seconds
+        var statusTimer = new System.Timers.Timer(2000); 
         statusTimer.Elapsed += async (sender, e) => await CheckServiceStatus();
         statusTimer.Start();
     }
@@ -133,13 +132,12 @@
     private void UpdateTime()
     {
         currentTime = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"); // Include today's date with time
-        InvokeAsync(StateHasChanged); // Ensure the UI is updated
+        InvokeAsync(StateHasChanged);
     }
 
 
     private async Task CheckServiceStatus()
     {
-        // Check if the service is running internally
         bool isRunning = CheckServiceInternalStatus();
 
         if (isRunning != isServiceRunning)
@@ -147,18 +145,15 @@
             isServiceRunning = isRunning;
             statusMessage = isServiceRunning ? "Service is running." : "Service not started.";
             await LocalStorage.SetItemAsync("isServiceRunning", isServiceRunning);
-            InvokeAsync(StateHasChanged); // Ensure the UI is updated
+            InvokeAsync(StateHasChanged); 
         }
 
-        // Optionally, update message counts periodically
         await GetMessageCounts();
     }
 
     private bool CheckServiceInternalStatus()
     {
-        // Implement your logic to determine if the service is actually running
-        // For example, check some in-memory state or other flags
-        return PushSmsJob.IsRunning; // Replace with actual status check
+        return PushSmsJob.IsRunning; 
     }
 
     private async Task StartService()
@@ -251,7 +246,6 @@
                 {
                     using (SqlDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        // Check if there are rows for the first result (Processed Messages)
                         if (await reader.ReadAsync())
                         {
                             processedMessages = reader.GetInt32(0);
@@ -261,7 +255,6 @@
                             processedMessages = 0; // Default if no rows
                         }
 
-                        // Move to the second result set (Unsent Messages)
                         if (await reader.NextResultAsync())
                         {
                             if (await reader.ReadAsync())

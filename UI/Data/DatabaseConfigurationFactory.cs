@@ -12,15 +12,5 @@ namespace UI.Data
         {
             _serviceProvider = serviceProvider;
         }
-
-        public IDatabaseConfigurationService GetService(string databaseType)
-        {
-            return databaseType switch
-            {
-                "SQL" => _serviceProvider.GetRequiredService<SqlServerConfigurationService>(),
-                // Add more  (MySQL, Oracle, SQLite) 
-                _ => throw new NotImplementedException($"Database type '{databaseType}' is not supported."),
-            };
-        }
     }
 }
