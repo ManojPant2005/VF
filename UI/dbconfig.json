@@ -1,15 +1,15 @@
 {
-  "ConnectionString": "Data Source=MP\\SQLEXPRESS;Initial Catalog=VF;Integrated Security=True;TrustServerCertificate=True",
+  "ConnectionString": "Data Source=MP\\SQLEXPRESS;Initial Catalog=TestDatabaseFromUI;Integrated Security=True;TrustServerCertificate=True",
   "TableName": "VF_SMS",
   "ColumnMappings": {
     "SmsID": "SmsID",
-    "MobileNumber": "MobileNumber",
-    "MessageText": "MessageText",
-    "SMS_process_on": "SMS_process_on",
-    "SMS_transmitted_on": "SMS_transmitted_on",
-    "DLR_process_on": "DLR_process_on",
-    "DLR_transmitted_on": "DLR_transmitted_on",
-    "DLR_status": "DLR_status",
+    "MobileNumber": "MN",
+    "MessageText": "MT",
+    "SMS_process_on": "SPO",
+    "SMS_transmitted_on": "STO",
+    "DLR_process_on": "DPO",
+    "DLR_transmitted_on": "DTO",
+    "DLR_status": "DS",
     "Error_code": "Error_code",
     "Retry_count": "Retry_count"
   }

@@ -3,9 +3,11 @@
 @using System.Text.Json
 @inject ILogger<DatabaseConfiguration> Logger
 @inject DatabaseService DatabaseService
+@using Oracle.ManagedDataAccess.Client;
+
+
 
 <h3>Manage and Configure Database</h3>
-
 <div class="card p-4 mb-4">
     <div class="form-group">
         <label for="databaseName">Database Name <span class="text-danger">*</span></label>
@@ -30,6 +32,40 @@
             <div class="text-danger">Database Type is required.</div>
         }
     </div>
+
+    @if (selectedDatabaseType == "Oracle")
+    {
+        <div class="form-group">
+            <label for="oracleServiceName">Service Name <span class="text-danger">*</span></label>
+            <input type="text" id="oracleServiceName" class="form-control" @bind="oracleServiceName" />
+            @if (string.IsNullOrWhiteSpace(oracleServiceName))
+            {
+                <div class="text-danger">Service Name is required.</div>
+            }
+
+            <label for="oracleDataSource">Oracle Data Source <span class="text-danger">*</span></label>
+            <input type="text" id="oracleDataSource" class="form-control" @bind="oracleDataSource" />
+            @if (string.IsNullOrWhiteSpace(oracleDataSource))
+            {
+                <div class="text-danger">Data Source is required.</div>
+            }
+
+            <label for="oracleUsername">Username <span class="text-danger">*</span></label>
+            <input type="text" id="oracleUsername" class="form-control" @bind="oracleUsername" />
+            @if (string.IsNullOrWhiteSpace(oracleUsername))
+            {
+                <div class="text-danger">Username is required.</div>
+            }
+
+            <label for="oraclePassword">Password <span class="text-danger">*</span></label>
+            <input type="password" id="oraclePassword" class="form-control" @bind="oraclePassword" />
+            @if (string.IsNullOrWhiteSpace(oraclePassword))
+            {
+                <div class="text-danger">Password is required.</div>
+            }
+        </div>
+    }
+
 
     @if (selectedDatabaseType == "SQLServer")
     {
@@ -109,9 +145,23 @@
     private string tableName = "";
     private string statusMessage = "";
 
+    private string oracleDataSource = "";
+    private string oracleUsername = "";
+    private string oraclePassword = "";
+    private string oracleServiceName = "";
 
 
     [Inject] private DatabaseConfigService DatabaseConfigService { get; set; }
+
+    private bool IsFormInvalid => string.IsNullOrWhiteSpace(selectedDatabaseType) || string.IsNullOrWhiteSpace(tableName);
+
+    private bool isSQLAuthSelected => authenticationMode == "SQL";
+
+    private void OnAuthenticationModeChanged(ChangeEventArgs e)
+    {
+        authenticationMode = e.Value.ToString();
+    }
+
 
 
 
@@ -157,14 +207,6 @@
         {"Retry_count", ""}
     };
 
-    private bool IsFormInvalid => string.IsNullOrWhiteSpace(selectedDatabaseType) || string.IsNullOrWhiteSpace(tableName);
-
-    private bool isSQLAuthSelected => authenticationMode == "SQL";
-
-    private void OnAuthenticationModeChanged(ChangeEventArgs e)
-    {
-        authenticationMode = e.Value.ToString();
-    }
 
     protected override void OnInitialized()
     {
@@ -183,6 +225,8 @@
         };
     }
 
+
+
     private async Task OnConfirm()
     {
         if (IsFormInvalid)
@@ -191,33 +235,209 @@
             return;
         }
 
-        // Generate the connection string
-        var connectionString = DatabaseService.GenerateConnectionString(serverName, null, username, password, isSQLAuthSelected, trustServerCertificate);
-        Console.WriteLine($"Connection String (without database): {connectionString}");
-
-        // Test SQL connection
-        var connectionTestResult = await DatabaseService.TestSqlConnectionAsync(connectionString);
-        if (!connectionTestResult)
+        if (selectedDatabaseType == "Oracle")
         {
-            statusMessage = "Connection test failed. Please check the server details.";
-            return;
-        }
+            // Construct the connection string for the new user
+            var connectionString = $"User Id=manoj;Password={oraclePassword};Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521)))(CONNECT_DATA=(SERVICE_NAME=orcl)));";
+            Console.WriteLine($"Oracle Connection String: {connectionString}");
 
-        // Create database if it doesn't exist
-        var databaseCreated = await DatabaseService.CreateDatabaseIfNotExistsAsync(connectionString, databaseName);
-        if (!databaseCreated)
+            try
+            {
+                // Test Oracle connection
+                var connectionTestResult = await DatabaseService.TestOracleConnectionAsync(connectionString);
+                if (!connectionTestResult)
+                {
+                    statusMessage = "Oracle connection test failed. Please check the Data Source, Username, and Password.";
+                    return;
+                }
+
+                // Proceed with creating the table and stored procedures
+                // Fetch column names for Oracle stored procedures
+                var columnNames = GetOracleColumnNames();
+
+                // Fetch data types for Oracle table creation
+                var columnDataTypes = GetOracleColumnDataTypes();
+
+                // Create table for Oracle
+                var tableCreated = await DatabaseService.CreateOracleTableAsync(connectionString, tableName, columnDataTypes);
+                if (!tableCreated)
+                {
+                    statusMessage = "Failed to create the table in Oracle.";
+                    return;
+                }
+
+                // Create stored procedures for Oracle
+                var storedProceduresCreated = await DatabaseService.CreateOracleStoredProceduresAsync(
+                    connectionString,
+                    tableName,
+                    columnNames["SmsID"],
+                    columnNames["MobileNumber"],
+                    columnNames["MessageText"],
+                    columnNames["SMS_process_on"],
+                    columnNames["SMS_transmitted_on"]
+                );
+
+                if (!storedProceduresCreated)
+                {
+                    statusMessage = "Failed to create stored procedures in Oracle.";
+                    return;
+                }
+
+                // Save Oracle configuration to JSON
+                var configSaved = await DatabaseService.SaveConfigurationToJsonAsync(connectionString, tableName, columnNames);
+                if (!configSaved)
+                {
+                    statusMessage = "Failed to save Oracle configuration.";
+                    return;
+                }
+
+                statusMessage = "Oracle configuration saved successfully.";
+            }
+            catch (Exception ex)
+            {
+                statusMessage = $"Oracle connection failed: {ex.Message}";
+            }
+        }
+        else if (selectedDatabaseType == "SQLServer")
         {
-            statusMessage = "Failed to create the database.";
-            return;
+            var connectionString = DatabaseService.GenerateConnectionString(serverName, null, username, password, isSQLAuthSelected, trustServerCertificate);
+            Console.WriteLine($"Connection String (without database): {connectionString}");
+
+            // Test SQL connection
+            var connectionTestResult = await DatabaseService.TestSqlConnectionAsync(connectionString);
+            if (!connectionTestResult)
+            {
+                statusMessage = "Connection test failed. Please check the server details.";
+                return;
+            }
+
+            // Create database if it doesn't exist
+            var databaseCreated = await DatabaseService.CreateDatabaseIfNotExistsAsync(connectionString, databaseName);
+            if (!databaseCreated)
+            {
+                statusMessage = "Failed to create the database.";
+                return;
+            }
+
+            // Define required columns and user-defined mappings
+            var userDefinedColumns = columnSelections
+                .Where(c => c.Value)
+                .Select(c => new { Original = c.Key, CustomName = GetCustomColumnName(c.Key) })
+                .ToList();
+
+            var requiredColumns = new Dictionary<string, string>
+        {
+            { "SmsID", "SmsID" },
+            { "MobileNumber", "MobileNumber" },
+            { "MessageText", "MessageText" },
+            { "SMS_process_on", "SMS_process_on" },
+            { "SMS_transmitted_on", "SMS_transmitted_on" },
+            { "DLR_process_on", "DLR_process_on" },
+            { "DLR_transmitted_on", "DLR_transmitted_on" },
+            { "DLR_status", "DLR_status" },
+            { "Error_code", "Error_code" },
+            { "Retry_count", "Retry_count" }
+        };
+
+            // Map columns
+            var columnMappings = requiredColumns.ToDictionary(
+                kvp => kvp.Key,
+                kvp => userDefinedColumns.FirstOrDefault(c => c.Original == kvp.Value)?.CustomName ?? kvp.Value
+            );
+
+            // Check for missing columns
+            var missingRequiredColumns = requiredColumns
+                .Where(kvp => kvp.Key != "SmsID" && string.IsNullOrWhiteSpace(columnMappings[kvp.Key]))
+                .Select(kvp => kvp.Key)
+                .ToList();
+
+            if (missingRequiredColumns.Any())
+            {
+                statusMessage = $"Required columns missing: {string.Join(", ", missingRequiredColumns)}. Please ensure all necessary columns are selected.";
+                return;
+            }
+
+            // Ensure "SmsID" is always mapped
+            if (string.IsNullOrWhiteSpace(columnMappings["SmsID"]))
+            {
+                columnMappings["SmsID"] = "SmsID";
+            }
+
+            // Log the column mappings
+            Console.WriteLine("Column mappings:");
+            foreach (var mapping in columnMappings)
+            {
+                Console.WriteLine($"Original: {mapping.Key}, Custom: {mapping.Value}");
+            }
+
+            // Generate connection string with the database name
+            var connectionStringWithDb = DatabaseService.GenerateConnectionString(serverName, databaseName, username, password, isSQLAuthSelected, trustServerCertificate);
+            Console.WriteLine($"Connection String (with database): {connectionStringWithDb}");
+
+            // Create the table
+            var tableCreated = await DatabaseService.CreateTableAsync(connectionStringWithDb, tableName, columnMappings);
+            if (!tableCreated)
+            {
+                statusMessage = "Failed to create the table.";
+                return;
+            }
+
+            // Create the stored procedures
+            var storedProceduresCreated = await DatabaseService.CreateSqlStoredProceduresAsync(
+                connectionStringWithDb,
+                tableName,
+                columnMappings["SmsID"],
+                columnMappings["MobileNumber"],
+                columnMappings["MessageText"],
+                columnMappings["SMS_process_on"],
+                columnMappings["SMS_transmitted_on"]
+            );
+
+            if (!storedProceduresCreated)
+            {
+                statusMessage = "Failed to create stored procedures.";
+                return;
+            }
+
+            var configSaved = await DatabaseService.SaveConfigurationToJsonAsync(
+                connectionStringWithDb,
+                tableName,
+                columnMappings
+            );
+
+            if (!configSaved)
+            {
+                statusMessage = "Failed to save configuration.";
+                return;
+            }
+
+            statusMessage = "Database, table, and stored procedures created successfully. Configuration saved to JSON.";
         }
+    }
 
-        // Define required columns and user-defined mappings
-        var userDefinedColumns = columnSelections
-            .Where(c => c.Value)
-            .Select(c => new { Original = c.Key, CustomName = GetCustomColumnName(c.Key) })
-            .ToList();
+    // Helper method to define column mappings
+    private Dictionary<string, string> GetColumnMappings()
+    {
+        // Define the mappings for columns
+        return new Dictionary<string, string>
+    {
+    { "SmsID", "NUMBER" },
+    { "MobileNumber", "VARCHAR2(15)" }, // Assuming a mobile number can be 15 characters
+    { "MessageText", "VARCHAR2(255)" },
+    { "SMS_process_on", "DATE" },
+    { "SMS_transmitted_on", "DATE" },
+    { "DLR_process_on", "DATE" },
+    { "DLR_transmitted_on", "DATE" },
+    { "DLR_status", "VARCHAR2(50)" },
+    { "Error_code", "VARCHAR2(50)" },
+    { "Retry_count", "NUMBER" }
+    };
+    }
 
-        var requiredColumns = new Dictionary<string, string>
+    // Adjust the method to return column names (for procedure creation)
+    private Dictionary<string, string> GetOracleColumnNames()
+    {
+        return new Dictionary<string, string>
     {
         { "SmsID", "SmsID" },
         { "MobileNumber", "MobileNumber" },
@@ -228,80 +448,26 @@
         { "DLR_transmitted_on", "DLR_transmitted_on" },
         { "DLR_status", "DLR_status" },
         { "Error_code", "Error_code" },
-        { "Retry_count", "Retry_count" },
+        { "Retry_count", "Retry_count" }
     };
+    }
 
-        // Map columns
-        var columnMappings = requiredColumns.ToDictionary(
-            kvp => kvp.Key,
-            kvp => userDefinedColumns.FirstOrDefault(c => c.Original == kvp.Value)?.CustomName ?? kvp.Value
-        );
-
-        // Check for missing columns
-        var missingRequiredColumns = requiredColumns
-            .Where(kvp => kvp.Key != "SmsID" && string.IsNullOrWhiteSpace(columnMappings[kvp.Key]))
-            .Select(kvp => kvp.Key)
-            .ToList();
-
-        if (missingRequiredColumns.Any())
-        {
-            statusMessage = $"Required columns missing: {string.Join(", ", missingRequiredColumns)}. Please ensure all necessary columns are selected.";
-            return;
-        }
-
-        // Ensure "SmsID" is always mapped
-        if (string.IsNullOrWhiteSpace(columnMappings["SmsID"]))
-        {
-            columnMappings["SmsID"] = "SmsID";
-        }
-
-        // Log the column mappings
-        Console.WriteLine("Column mappings:");
-        foreach (var mapping in columnMappings)
-        {
-            Console.WriteLine($"Original: {mapping.Key}, Custom: {mapping.Value}");
-        }
-
-        // Generate connection string with the database name
-        var connectionStringWithDb = DatabaseService.GenerateConnectionString(serverName, databaseName, username, password, isSQLAuthSelected, trustServerCertificate);
-        Console.WriteLine($"Connection String (with database): {connectionStringWithDb}");
-
-        // Create the table
-        var tableCreated = await DatabaseService.CreateTableAsync(connectionStringWithDb, tableName, columnMappings);
-        if (!tableCreated)
-        {
-            statusMessage = "Failed to create the table.";
-            return;
-        }
-
-        // Create the stored procedures
-        var storedProceduresCreated = await DatabaseService.CreateStoredProceduresAsync(
-            connectionStringWithDb,
-            tableName,
-            columnMappings["SmsID"],
-            columnMappings["MobileNumber"],
-            columnMappings["MessageText"],
-            columnMappings["SMS_process_on"],
-            columnMappings["SMS_transmitted_on"]);
-
-        if (!storedProceduresCreated)
-        {
-            statusMessage = "Failed to create stored procedures.";
-            return;
-        }
-
-        var configSaved = await DatabaseService.SaveConfigurationToJsonAsync(
-            connectionStringWithDb, 
-            tableName, 
-            columnMappings);
-
-        if (!configSaved)
-        {
-            statusMessage = "Failed to save configuration.";
-            return;
-        }
-
-        statusMessage = "Database, table, and stored procedures created successfully. Configuration saved to JSON.";
+    // Adjust the method to return data types (for table creation)
+    private Dictionary<string, string> GetOracleColumnDataTypes()
+    {
+        return new Dictionary<string, string>
+    {
+        { "SmsID", "NUMBER" },
+        { "MobileNumber", "VARCHAR2(15)" }, // Assuming a mobile number can be 15 characters
+        { "MessageText", "VARCHAR2(255)" },
+        { "SMS_process_on", "DATE" },
+        { "SMS_transmitted_on", "DATE" },
+        { "DLR_process_on", "DATE" },
+        { "DLR_transmitted_on", "DATE" },
+        { "DLR_status", "VARCHAR2(50)" },
+        { "Error_code", "VARCHAR2(50)" },
+        { "Retry_count", "NUMBER" }
+    };
     }
 
     private string GetCustomColumnName(string columnName)
