@@ -35,31 +35,105 @@ namespace UI.Services
             }
         }
 
-        public async Task<bool> CreateOracleTableAsync(string connectionString, string tableName, Dictionary<string, string> columnMappings)
+        //public async Task<bool> CreateOracleTableAsync(string connectionString, string tableName, Dictionary<string, string> columnMappings)
+        //{
+        //    using (var connection = new OracleConnection(connectionString))
+        //    {
+        //        await connection.OpenAsync();
+        //        var columns = string.Join(", ", columnMappings.Select(kvp => $"{kvp.Key} {kvp.Value}"));
+        //        var createTableSql = $"CREATE TABLE {tableName} ({columns})";
+
+        //        Console.WriteLine($"Create Table SQL: {createTableSql}"); // Log the SQL statement
+
+        //        using (var command = new OracleCommand(createTableSql, connection))
+        //        {
+        //            try
+        //            {
+        //                await command.ExecuteNonQueryAsync();
+        //                return true;
+        //            }
+        //            catch (OracleException ex)
+        //            {
+        //                Console.WriteLine($"Failed to create table in Oracle: {ex.Message}");
+        //                return false;
+        //            }
+        //        }
+        //    }
+        //}
+
+        public async Task<bool> CreateOracleTableAsync(string connectionString, string tableName, Dictionary<string, string> columnNames, Dictionary<string, string> columnDataTypes)
         {
             using (var connection = new OracleConnection(connectionString))
             {
                 await connection.OpenAsync();
-                var columns = string.Join(", ", columnMappings.Select(kvp => $"{kvp.Key} {kvp.Value}"));
-                var createTableSql = $"CREATE TABLE {tableName} ({columns})";
 
-                Console.WriteLine($"Create Table SQL: {createTableSql}"); // Log the SQL statement
+                // Construct the SQL query to create the table with column names and data types
+                var createTableQuery = $"CREATE TABLE {tableName} (";
 
-                using (var command = new OracleCommand(createTableSql, connection))
+                Console.WriteLine("Column Names: ");
+                foreach (var column in columnNames)
+                {
+                    Console.WriteLine($"Key: {column.Key}, Value: {column.Value}");
+
+                    var columnName = column.Value;
+                    var columnDataType = columnDataTypes[column.Key];
+
+                    // Ensure column name is valid
+                    if (!IsValidOracleIdentifier(columnName))
+                    {
+                        Console.WriteLine($"Invalid column name: {columnName}");
+                        return false; // Invalid column name
+                    }
+
+                    createTableQuery += $"{columnName} {columnDataType},";
+                }
+
+                // Remove the trailing comma and add closing parenthesis
+                createTableQuery = createTableQuery.TrimEnd(',') + ")";
+
+                using (var command = new OracleCommand(createTableQuery, connection))
                 {
                     try
                     {
                         await command.ExecuteNonQueryAsync();
-                        return true;
+                        Console.WriteLine($"Table {tableName} created successfully.");
+                        return true; // Table created successfully
                     }
                     catch (OracleException ex)
                     {
-                        Console.WriteLine($"Failed to create table in Oracle: {ex.Message}");
+                        Console.WriteLine($"Error creating table: {ex.Message}");
                         return false;
                     }
                 }
             }
         }
+
+        // Helper method to validate Oracle identifiers
+        private bool IsValidOracleIdentifier(string identifier)
+        {
+            // Check if the identifier is a valid Oracle identifier
+            if (string.IsNullOrEmpty(identifier) || identifier.Length > 30)
+            {
+                return false; // Identifier must not be null or exceed 30 characters
+            }
+
+            if (!char.IsLetter(identifier[0]))
+            {
+                return false; // Must start with a letter
+            }
+
+            // Check for invalid characters (only letters, digits, and underscores are allowed)
+            foreach (char c in identifier)
+            {
+                if (!char.IsLetterOrDigit(c) && c != '_')
+                {
+                    return false; // Invalid character found
+                }
+            }
+
+            return true; // Identifier is valid
+        }
+
 
         public async Task<bool> TestSqlConnectionAsync(string connectionString)
         {
@@ -231,27 +305,34 @@ namespace UI.Services
         public async Task<bool> CreateOracleStoredProceduresAsync(string connectionString, string tableName, string columnSmsID,
             string columnMobileNumber, string columnMessageText, string columnSmsProcessOn, string columnSmsTransmittedOn)
         {
-            // Create Fetch Procedure Query using column names
+            // Create Fetch Procedure Query using correct Oracle syntax
             var createFetchProcedureQuery = $@"
 CREATE OR REPLACE PROCEDURE USP_VF_FETCH_SMS AS
     v_SmsID {columnSmsID}%TYPE;
     v_MobileNumber {columnMobileNumber}%TYPE;
     v_MessageText {columnMessageText}%TYPE;
 BEGIN
-    SELECT {columnSmsID}, {columnMobileNumber}, {columnMessageText}
-    INTO v_SmsID, v_MobileNumber, v_MessageText
-    FROM {tableName}
-    WHERE {columnSmsProcessOn} IS NULL
-    AND ROWNUM = 1;  -- Fetch only one record
+    -- Select one record where SMS_process_on is NULL
+    BEGIN
+        SELECT {columnSmsID}, {columnMobileNumber}, {columnMessageText}
+        INTO v_SmsID, v_MobileNumber, v_MessageText
+        FROM {tableName}
+        WHERE {columnSmsProcessOn} IS NULL
+        AND ROWNUM = 1;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            NULL; -- No matching records found
+    END;
 
+    -- Update the processed record
     UPDATE {tableName}
     SET {columnSmsProcessOn} = SYSDATE
-    WHERE {columnSmsProcessOn} IS NULL
-    AND {columnSmsID} = v_SmsID;  -- Update only the processed record
+    WHERE {columnSmsID} = v_SmsID
+    AND {columnSmsProcessOn} IS NULL;
 END;
 ";
 
-            // Create Update Procedure Query using column names
+            // Create Update Procedure Query
             var createUpdateProcedureQuery = $@"
 CREATE OR REPLACE PROCEDURE USP_VF_UPDATE_SMS (p_SmsID IN {columnSmsID}%TYPE) AS
 BEGIN
@@ -338,7 +419,8 @@ END;
         public async Task<bool> SaveConfigurationToJsonAsync(
             string connectionString,
             string tableName,
-            Dictionary<string, string> columnMappings)
+            Dictionary<string, string> columnMappings,
+            string databaseType) // Add this parameter
         {
             try
             {
@@ -347,7 +429,8 @@ END;
                 {
                     ConnectionString = connectionString,
                     TableName = tableName,
-                    ColumnMappings = columnMappings
+                    ColumnMappings = columnMappings,
+                    DatabaseType = databaseType // Include database type
                 };
 
                 // Define the path to the JSON file
@@ -368,5 +451,6 @@ END;
                 return false;
             }
         }
+
     }
 }

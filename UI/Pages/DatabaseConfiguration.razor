@@ -162,6 +162,22 @@
         authenticationMode = e.Value.ToString();
     }
 
+    private Dictionary<string, string> GetOracleColumnNames()
+    {
+        return new Dictionary<string, string>
+    {
+        { "SmsID", "SmsID" },  // Always keep the primary key consistent
+        { "MobileNumber", string.IsNullOrWhiteSpace(customColumnNames["MobileNumber"]) ? "MobileNumber" : customColumnNames["MobileNumber"] },
+        { "MessageText", string.IsNullOrWhiteSpace(customColumnNames["MessageText"]) ? "MessageText" : customColumnNames["MessageText"] },
+        { "SMS_process_on", string.IsNullOrWhiteSpace(customColumnNames["SMS_process_on"]) ? "SMS_process_on" : customColumnNames["SMS_process_on"] },
+        { "SMS_transmitted_on", string.IsNullOrWhiteSpace(customColumnNames["SMS_transmitted_on"]) ? "SMS_transmitted_on" : customColumnNames["SMS_transmitted_on"] },
+        { "DLR_process_on", string.IsNullOrWhiteSpace(customColumnNames["DLR_process_on"]) ? "DLR_process_on" : customColumnNames["DLR_process_on"] },
+        { "DLR_transmitted_on", string.IsNullOrWhiteSpace(customColumnNames["DLR_transmitted_on"]) ? "DLR_transmitted_on" : customColumnNames["DLR_transmitted_on"] },
+        { "DLR_status", string.IsNullOrWhiteSpace(customColumnNames["DLR_status"]) ? "DLR_status" : customColumnNames["DLR_status"] },
+        { "Error_code", string.IsNullOrWhiteSpace(customColumnNames["Error_code"]) ? "Error_code" : customColumnNames["Error_code"] },
+        { "Retry_count", string.IsNullOrWhiteSpace(customColumnNames["Retry_count"]) ? "Retry_count" : customColumnNames["Retry_count"] }
+    };
+    }
 
 
 
@@ -254,12 +270,15 @@
                 // Proceed with creating the table and stored procedures
                 // Fetch column names for Oracle stored procedures
                 var columnNames = GetOracleColumnNames();
+                var columnDataTypes = GetOracleColumnDataTypes(); // Fetch the data types
 
-                // Fetch data types for Oracle table creation
-                var columnDataTypes = GetOracleColumnDataTypes();
+                var tableCreated = await DatabaseService.CreateOracleTableAsync(
+                    connectionString,
+                    tableName,
+                    columnNames,
+                    columnDataTypes
+                );
 
-                // Create table for Oracle
-                var tableCreated = await DatabaseService.CreateOracleTableAsync(connectionString, tableName, columnDataTypes);
                 if (!tableCreated)
                 {
                     statusMessage = "Failed to create the table in Oracle.";
@@ -284,7 +303,7 @@
                 }
 
                 // Save Oracle configuration to JSON
-                var configSaved = await DatabaseService.SaveConfigurationToJsonAsync(connectionString, tableName, columnNames);
+                var configSaved = await DatabaseService.SaveConfigurationToJsonAsync(connectionString, tableName, columnNames, selectedDatabaseType);
                 if (!configSaved)
                 {
                     statusMessage = "Failed to save Oracle configuration.";
@@ -399,10 +418,12 @@
                 return;
             }
 
+            // Save SQL Server configuration to JSON
             var configSaved = await DatabaseService.SaveConfigurationToJsonAsync(
                 connectionStringWithDb,
                 tableName,
-                columnMappings
+                columnMappings,
+                selectedDatabaseType // Pass the selected database type here
             );
 
             if (!configSaved)
@@ -434,23 +455,6 @@
     };
     }
 
-    // Adjust the method to return column names (for procedure creation)
-    private Dictionary<string, string> GetOracleColumnNames()
-    {
-        return new Dictionary<string, string>
-    {
-        { "SmsID", "SmsID" },
-        { "MobileNumber", "MobileNumber" },
-        { "MessageText", "MessageText" },
-        { "SMS_process_on", "SMS_process_on" },
-        { "SMS_transmitted_on", "SMS_transmitted_on" },
-        { "DLR_process_on", "DLR_process_on" },
-        { "DLR_transmitted_on", "DLR_transmitted_on" },
-        { "DLR_status", "DLR_status" },
-        { "Error_code", "Error_code" },
-        { "Retry_count", "Retry_count" }
-    };
-    }
 
     // Adjust the method to return data types (for table creation)
     private Dictionary<string, string> GetOracleColumnDataTypes()

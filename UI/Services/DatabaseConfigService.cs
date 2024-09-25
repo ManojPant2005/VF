@@ -7,6 +7,7 @@ public class DatabaseConfigService
 {
     public string ConnectionString { get; set; }
     public string TableName { get; set; }
+    public string DatabaseType { get; set; } // Add this property
 
     // Load the configuration 
     public async Task LoadConfigurationAsync(string configPath)
@@ -29,6 +30,7 @@ public class DatabaseConfigService
 
                 ConnectionString = config.ConnectionString;
                 TableName = config.TableName;
+                DatabaseType = config.DatabaseType; // Initialize DatabaseType from the config
             }
             catch (Exception ex)
             {
