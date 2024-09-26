@@ -70,34 +70,40 @@ namespace UI.Services
                 // Construct the SQL query to create the table with column names and data types
                 var createTableQuery = $"CREATE TABLE {tableName} (";
 
-                Console.WriteLine("Column Names: ");
+                // Check if SmsID is already part of the columns
+                bool isSmsIDIncluded = columnNames.Values.Contains("SmsID");
+
                 foreach (var column in columnNames)
                 {
-                    Console.WriteLine($"Key: {column.Key}, Value: {column.Value}");
-
                     var columnName = column.Value;
                     var columnDataType = columnDataTypes[column.Key];
 
-                    // Ensure column name is valid
                     if (!IsValidOracleIdentifier(columnName))
                     {
                         Console.WriteLine($"Invalid column name: {columnName}");
                         return false; // Invalid column name
                     }
 
+                    // Add columns to the create table query
                     createTableQuery += $"{columnName} {columnDataType},";
                 }
 
-                // Remove the trailing comma and add closing parenthesis
+                // Only add SmsID as PRIMARY KEY if it is not already present
+                if (!isSmsIDIncluded)
+                {
+                    createTableQuery += "SmsID NUMBER PRIMARY KEY,";
+                }
+
+                // Remove trailing comma and close the table creation
                 createTableQuery = createTableQuery.TrimEnd(',') + ")";
 
+                // Execute the table creation
                 using (var command = new OracleCommand(createTableQuery, connection))
                 {
                     try
                     {
                         await command.ExecuteNonQueryAsync();
                         Console.WriteLine($"Table {tableName} created successfully.");
-                        return true; // Table created successfully
                     }
                     catch (OracleException ex)
                     {
@@ -105,6 +111,77 @@ namespace UI.Services
                         return false;
                     }
                 }
+
+                // Check if the sequence already exists
+                var checkSequenceQuery = $"SELECT COUNT(*) FROM ALL_SEQUENCES WHERE SEQUENCE_NAME = '{tableName.ToUpper()}_SEQ'";
+                using (var checkSeqCommand = new OracleCommand(checkSequenceQuery, connection))
+                {
+                    var sequenceExists = Convert.ToInt32(await checkSeqCommand.ExecuteScalarAsync()) > 0;
+
+                    if (!sequenceExists)
+                    {
+                        // Create a sequence for SmsID (auto-increment equivalent in Oracle)
+                        var createSequenceQuery = $"CREATE SEQUENCE {tableName}_seq START WITH 1 INCREMENT BY 1";
+                        using (var seqCommand = new OracleCommand(createSequenceQuery, connection))
+                        {
+                            try
+                            {
+                                await seqCommand.ExecuteNonQueryAsync();
+                                Console.WriteLine($"Sequence {tableName}_seq created successfully.");
+                            }
+                            catch (OracleException ex)
+                            {
+                                Console.WriteLine($"Error creating sequence: {ex.Message}");
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Sequence {tableName}_seq already exists, skipping creation.");
+                    }
+                }
+
+                // Check if the trigger already exists
+                var checkTriggerQuery = $"SELECT COUNT(*) FROM ALL_TRIGGERS WHERE TRIGGER_NAME = '{tableName.ToUpper()}_TRG'";
+                using (var checkTrgCommand = new OracleCommand(checkTriggerQuery, connection))
+                {
+                    var triggerExists = Convert.ToInt32(await checkTrgCommand.ExecuteScalarAsync()) > 0;
+
+                    if (!triggerExists)
+                    {
+                        // Create a trigger to automatically assign the next value of the sequence to SmsID
+                        var createTriggerQuery = $@"
+                CREATE OR REPLACE TRIGGER {tableName}_trg
+                BEFORE INSERT ON {tableName}
+                FOR EACH ROW
+                BEGIN
+                    IF :NEW.SmsID IS NULL THEN
+                        SELECT {tableName}_seq.NEXTVAL INTO :NEW.SmsID FROM dual;
+                    END IF;
+                END;";
+
+                        using (var trgCommand = new OracleCommand(createTriggerQuery, connection))
+                        {
+                            try
+                            {
+                                await trgCommand.ExecuteNonQueryAsync();
+                                Console.WriteLine($"Trigger {tableName}_trg created successfully.");
+                            }
+                            catch (OracleException ex)
+                            {
+                                Console.WriteLine($"Error creating trigger: {ex.Message}");
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Trigger {tableName}_trg already exists, skipping creation.");
+                    }
+                }
+
+                return true; // Everything created successfully
             }
         }
 

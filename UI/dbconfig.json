@@ -1,5 +1,5 @@
 {
-  "ConnectionString": "Data Source=MP\\SQLEXPRESS;Initial Catalog=TestDatabase2FromUI;Integrated Security=True;TrustServerCertificate=True",
+  "ConnectionString": "Data Source=MP\\SQLEXPRESS;Initial Catalog=TestDB;Integrated Security=True;TrustServerCertificate=True",
   "TableName": "VF_SMS",
   "ColumnMappings": {
     "SmsID": "SmsID",

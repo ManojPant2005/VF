@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Oracle.ManagedDataAccess.Client; // Oracle data access
 using System;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Threading;
@@ -16,14 +18,13 @@ namespace UI.Jobs
         private PeriodicTimer _periodicTimer;
         private bool _isConfigLoaded = false;
         private bool _isRunning = false;
-
-        private readonly string _configPath;
         public string ErrorMessage { get; private set; }
+        private readonly ILogger<PushSmsJob> _logger;
+        private readonly string _configPath;
 
         public bool IsConfigLoaded => _isConfigLoaded;
-        private readonly ILogger<PushSmsJob> _logger;
         public bool IsRunning => _isRunning;
-        // Inject DatabaseConfigService and the config file path
+
         public PushSmsJob(DatabaseConfigService databaseConfigService, string configPath, ILogger<PushSmsJob> logger)
         {
             _databaseConfigService = databaseConfigService;
@@ -38,7 +39,6 @@ namespace UI.Jobs
                 _isRunning = true;
                 _logger.LogInformation("Push SMS Service starting...");
 
-                // Load the configuration before starting the service
                 await _databaseConfigService.LoadConfigurationAsync(_configPath);
 
                 if (string.IsNullOrEmpty(_databaseConfigService.ConnectionString))
@@ -48,7 +48,6 @@ namespace UI.Jobs
 
                 _isConfigLoaded = true;
                 _logger.LogInformation("Configuration loaded successfully.");
-
                 await base.StartAsync(cancellationToken);
             }
             catch (FileNotFoundException)
@@ -72,47 +71,20 @@ namespace UI.Jobs
             }
 
             _logger.LogInformation("Push SMS Job is running.");
+            _periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(60));
 
-            try
+            while (await _periodicTimer.WaitForNextTickAsync(stoppingToken))
             {
-                // Initialize PeriodicTimer
-                _periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(60));
-
-                // Main processing loop
-                while (await _periodicTimer.WaitForNextTickAsync(stoppingToken))
+                stoppingToken.ThrowIfCancellationRequested();
+                try
                 {
-                    // Check if cancellation is requested
-                    stoppingToken.ThrowIfCancellationRequested();
-
-                    // Safely process SMS messages
-                    try
-                    {
-                        ProcessSmsMessages();
-                    }
-                    catch (Exception smsEx)
-                    {
-                        _logger.LogError($"Error while processing SMS messages: {smsEx.Message}");
-                        LogMessage($"Error while processing SMS messages: {smsEx.Message}");
-                        // Optionally, you can rethrow or handle this error depending on your needs.
-                    }
+                    ProcessSmsMessages();
                 }
-            }
-            catch (OperationCanceledException)
-            {
-                _logger.LogInformation("Push SMS Job cancellation requested.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"An unexpected error occurred: {ex.Message}");
-                LogMessage($"An unexpected error occurred: {ex.Message}");
-            }
-            finally
-            {
-                _logger.LogInformation("Push SMS Job has stopped.");
-                LogMessage("Push SMS Job has stopped.");
-
-                // Properly dispose of the timer when done
-                _periodicTimer?.Dispose();
+                catch (Exception smsEx)
+                {
+                    _logger.LogError($"Error while processing SMS messages: {smsEx.Message}");
+                    LogMessage($"Error while processing SMS messages: {smsEx.Message}");
+                }
             }
         }
 
@@ -123,33 +95,32 @@ namespace UI.Jobs
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                if (_databaseConfigService.DatabaseType == "SQLServer")
                 {
-                    connection.Open();
-
-                    // Fetch SMS
-                    using (SqlCommand fetchCommand = new SqlCommand("USP_VF_FETCH_SMS", connection))
+                    using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        fetchCommand.CommandType = System.Data.CommandType.StoredProcedure;
-
-                        using (SqlDataReader reader = fetchCommand.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                int smsId = reader.GetInt32(0);
-                                string mobileNumber = reader.GetString(1);
-                                string messageText = reader.GetString(2);
-
-                                string logMessage = $"Message ID {smsId} sent to {mobileNumber} at {DateTime.Now}: {messageText}";
-                                _logger.LogInformation(logMessage);
-                                LogMessage(logMessage);
-
-                                // Update SMS_transmitted_on
-                                UpdateSmsTransmittedOn(smsId, connectionString);
-                            }
-                        }
+                        connection.Open();
+                        ProcessSmsForSqlServer(connection);
                     }
                 }
+                else if (_databaseConfigService.DatabaseType == "Oracle")
+                {
+                    using (OracleConnection connection = new OracleConnection(connectionString))
+                    {
+                        connection.Open();
+                        ProcessSmsForOracle(connection);
+                    }
+                }
+            }
+            catch (OracleException ex)
+            {
+                _logger.LogError($"Oracle connection error: {ex.Message} - {ex.StackTrace}");
+                LogMessage($"Oracle connection error: {ex.Message}");
+            }
+            catch (SqlException ex)
+            {
+                _logger.LogError($"SQL Server connection error: {ex.Message} - {ex.StackTrace}");
+                LogMessage($"SQL Server connection error: {ex.Message}");
             }
             catch (Exception ex)
             {
@@ -158,20 +129,87 @@ namespace UI.Jobs
             }
         }
 
-        private void UpdateSmsTransmittedOn(int smsId, string connectionString)
+        private void ProcessSmsForSqlServer(SqlConnection connection)
         {
+            using (SqlCommand fetchCommand = new SqlCommand("USP_VF_FETCH_SMS", connection))
+            {
+                fetchCommand.CommandType = CommandType.StoredProcedure;
+
+                using (SqlDataReader reader = fetchCommand.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int smsId = reader.GetInt32(0);
+                        string mobileNumber = reader.GetString(1);
+                        string messageText = reader.GetString(2);
+                        string logMessage = $"Message ID {smsId} sent to {mobileNumber} at {DateTime.Now}: {messageText}";
+                        _logger.LogInformation(logMessage);
+                        LogMessage(logMessage);
+                        UpdateSmsTransmittedOn(smsId, connection.ConnectionString, "SQLServer");
+                    }
+                }
+            }
+        }
+
+        private void ProcessSmsForOracle(OracleConnection connection)
+        {
+            using (OracleCommand fetchCommand = new OracleCommand("USP_VF_FETCH_SMS", connection))
+            {
+                fetchCommand.CommandType = CommandType.StoredProcedure;
+                fetchCommand.Parameters.Add("p_cursor", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+
+                _logger.LogInformation("Executing USP_VF_FETCH_SMS on Oracle database...");
+
+                using (OracleDataReader reader = fetchCommand.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int smsId = reader.GetInt32(0);
+                        string mobileNumber = reader.GetString(1);
+                        string messageText = reader.GetString(2);
+                        string logMessage = $"Processing Message ID {smsId} sent to {mobileNumber} at {DateTime.Now}: {messageText}";
+                        _logger.LogInformation(logMessage);
+                        LogMessage(logMessage);
+                        UpdateSmsTransmittedOn(smsId, connection.ConnectionString, "Oracle");
+                    }
+                }
+                _logger.LogInformation("Reader finished processing.");
+            }
+        }
+
+        private void UpdateSmsTransmittedOn(int smsId, string connectionString, string dbType)
+        {
+
+            string cs = _databaseConfigService.GenerateConnectionString();
+            _logger.LogInformation($"Using Connection String: {cs}");
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                _logger.LogInformation($"Attempting to update SMS ID: {smsId} using {dbType} database.");
+
+                if (dbType == "SQLServer")
                 {
-                    connection.Open();
-
-                    using (SqlCommand updateCommand = new SqlCommand("USP_VF_UPDATE_SMS", connection))
+                    using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        updateCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                        updateCommand.Parameters.AddWithValue("@SmsID", smsId);
-
-                        updateCommand.ExecuteNonQuery();
+                        connection.Open();
+                        using (SqlCommand updateCommand = new SqlCommand("USP_VF_UPDATE_SMS", connection))
+                        {
+                            updateCommand.CommandType = CommandType.StoredProcedure;
+                            updateCommand.Parameters.AddWithValue("@SmsID", smsId);
+                            updateCommand.ExecuteNonQuery();
+                        }
+                    }
+                }
+                else if (dbType == "Oracle")
+                {
+                    using (OracleConnection connection = new OracleConnection(cs))
+                    {
+                        connection.Open();
+                        using (OracleCommand updateCommand = new OracleCommand("USP_VF_UPDATE_SMS", connection))
+                        {
+                            updateCommand.CommandType = CommandType.StoredProcedure;
+                            updateCommand.Parameters.Add("SmsID", OracleDbType.Int32).Value = smsId;
+                            updateCommand.ExecuteNonQuery();
+                        }
                     }
                 }
             }
@@ -201,7 +239,7 @@ namespace UI.Jobs
         {
             _isRunning = false;
             _logger.LogInformation("Push SMS Service stopping...");
-            _periodicTimer?.Dispose(); // Dispose of the timer to stop further execution
+            _periodicTimer?.Dispose();
             await base.StopAsync(cancellationToken);
         }
     }

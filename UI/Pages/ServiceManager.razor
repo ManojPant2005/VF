@@ -1,6 +1,8 @@
 ﻿@page "/service-control"
 @using Microsoft.Extensions.Configuration
 @using Blazored.LocalStorage
+@using System.Data.SqlClient
+@using Oracle.ManagedDataAccess.Client
 @using UI.Jobs
 @inject ServiceController ServiceController
 @inject PushSmsJob PushSmsJob
@@ -16,7 +18,6 @@
                         <i class="fas fa-cogs"></i> Service Control
                     </h3>
                     <span class="badge badge-pill badge-light">@statusMessage</span>
-
                 </div>
                 <div class="card-body">
                     @if (!string.IsNullOrEmpty(errorMessage))
@@ -63,39 +64,21 @@
     private int processedMessages = 0;
     private int unsentMessages = 0;
     private string currentTime = DateTime.Now.ToString("HH:mm:ss");
+    private string databaseType;
 
     protected override async Task OnInitializedAsync()
     {
         await SetServiceStateFromLocalStorage();
 
-        // Reset message counts if it's a new day
-        await CheckAndResetDailyCounts();
+        // Get the database type from the configuration
+        databaseType = Configuration.GetValue<string>("DatabaseType");
 
-        // Fetch message count  | start the timers
+        // Fetch message counts | start the timers
         await GetMessageCounts();
 
         // Start timers for checking service status and updating current time
         StartStatusTimer();
         StartTimeTimer();
-    }
-
-    private async Task CheckAndResetDailyCounts()
-    {
-        // Get today's date
-        var today = DateTime.Now.Date;
-
-        // Check the last date from local storage
-        var lastCheckedDate = await LocalStorage.GetItemAsync<DateTime?>("lastCheckedDate");
-
-        if (!lastCheckedDate.HasValue || lastCheckedDate.Value != today)
-        {
-            // New day: Reset the message counts
-            processedMessages = 0;
-            unsentMessages = 0;
-
-            // Save today's date to local storage
-            await LocalStorage.SetItemAsync("lastCheckedDate", today);
-        }
     }
 
     private async Task SetServiceStateFromLocalStorage()
@@ -109,7 +92,6 @@
         }
         else
         {
-            // Default state if no previous state is found
             isServiceRunning = false;
             statusMessage = "Service not started.";
         }
@@ -117,24 +99,23 @@
 
     private void StartStatusTimer()
     {
-        var statusTimer = new System.Timers.Timer(2000); 
+        var statusTimer = new System.Timers.Timer(2000);
         statusTimer.Elapsed += async (sender, e) => await CheckServiceStatus();
         statusTimer.Start();
     }
 
     private void StartTimeTimer()
     {
-        var timeTimer = new System.Timers.Timer(1000); // Update time every second
+        var timeTimer = new System.Timers.Timer(1000);
         timeTimer.Elapsed += (sender, e) => UpdateTime();
         timeTimer.Start();
     }
 
     private void UpdateTime()
     {
-        currentTime = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"); // Include today's date with time
+        currentTime = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
         InvokeAsync(StateHasChanged);
     }
-
 
     private async Task CheckServiceStatus()
     {
@@ -145,7 +126,7 @@
             isServiceRunning = isRunning;
             statusMessage = isServiceRunning ? "Service is running." : "Service not started.";
             await LocalStorage.SetItemAsync("isServiceRunning", isServiceRunning);
-            InvokeAsync(StateHasChanged); 
+            InvokeAsync(StateHasChanged);
         }
 
         await GetMessageCounts();
@@ -153,7 +134,7 @@
 
     private bool CheckServiceInternalStatus()
     {
-        return PushSmsJob.IsRunning; 
+        return PushSmsJob.IsRunning;
     }
 
     private async Task StartService()
@@ -163,24 +144,13 @@
             errorMessage = string.Empty;
             successMessage = string.Empty;
 
-            // Start the PushSmsJob service
             await ServiceController.StartPushSmsJobAsync();
-
-            if (!PushSmsJob.IsConfigLoaded)
-            {
-                errorMessage = PushSmsJob.ErrorMessage ?? "Database configuration is missing.";
-                statusMessage = "Service failed to start.";
-                return;
-            }
 
             isServiceRunning = true;
             statusMessage = "Service is running.";
             successMessage = "The SMS service started successfully.";
-
-            // Save the service state to LocalStorage
             await LocalStorage.SetItemAsync("isServiceRunning", isServiceRunning);
 
-            // Fetch message counts after starting the service
             await GetMessageCounts();
         }
         catch (Exception ex)
@@ -197,14 +167,11 @@
             errorMessage = string.Empty;
             successMessage = string.Empty;
 
-            // Stop the PushSmsJob service
             await ServiceController.StopPushSmsJobAsync();
 
             isServiceRunning = false;
             statusMessage = "Service stopped successfully.";
             successMessage = "The SMS service has been stopped.";
-
-            // Save the service state to LocalStorage
             await LocalStorage.SetItemAsync("isServiceRunning", isServiceRunning);
         }
         catch (Exception ex)
@@ -218,53 +185,54 @@
     {
         try
         {
-            var connectionString = Configuration.GetValue<string>("ConnectionString");
             var tableName = Configuration.GetValue<string>("TableName");
-
-            if (string.IsNullOrEmpty(connectionString) || string.IsNullOrEmpty(tableName))
+            // Fetch message counts based on the database type
+            if (databaseType == "Oracle")
             {
-                errorMessage = "Connection string or table name is not configured.";
-                return;
+                await GetOracleMessageCounts(tableName);
             }
+            else if (databaseType == "SQLServer")
+            {
+                await GetSqlServerMessageCounts(tableName);
+            }
+            else
+            {
+                errorMessage = "Unsupported database type.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error fetching message counts: {ex.Message}";
+        }
+    }
 
-            // SQL query with dynamic table name
+    private async Task GetSqlServerMessageCounts(string tableName)
+    {
+        try
+        {
+            var connectionString = Configuration.GetValue<string>("ConnectionString");
+
             var query = $@"
-            SELECT COUNT(*) FROM {tableName}
-            WHERE SMS_transmitted_on IS NOT NULL
-            AND CONVERT(DATE, SMS_transmitted_on) = CONVERT(DATE, GETDATE());
+                SELECT COUNT(*) FROM {tableName} WHERE SMS_transmitted_on IS NOT NULL AND CONVERT(DATE, SMS_transmitted_on) = CONVERT(DATE, GETDATE());
+                SELECT COUNT(*) FROM {tableName} WHERE SMS_transmitted_on IS NULL;
+            ";
 
-
-           SELECT COUNT(*) FROM {tableName}
-           WHERE SMS_transmitted_on IS NULL;
-        ";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(connectionString))
             {
                 await connection.OpenAsync();
 
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (var command = new SqlCommand(query, connection))
                 {
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
                         if (await reader.ReadAsync())
                         {
                             processedMessages = reader.GetInt32(0);
                         }
-                        else
-                        {
-                            processedMessages = 0; // Default if no rows
-                        }
 
-                        if (await reader.NextResultAsync())
+                        if (await reader.NextResultAsync() && await reader.ReadAsync())
                         {
-                            if (await reader.ReadAsync())
-                            {
-                                unsentMessages = reader.GetInt32(0);
-                            }
-                            else
-                            {
-                                unsentMessages = 0; // Default if no rows
-                            }
+                            unsentMessages = reader.GetInt32(0);
                         }
                     }
                 }
@@ -272,7 +240,46 @@
         }
         catch (Exception ex)
         {
-            errorMessage = $"Error fetching message counts: {ex.Message}";
+            errorMessage = $"Error fetching SQL Server message counts: {ex.Message}";
+        }
+    }
+
+    private async Task GetOracleMessageCounts(string tableName)
+    {
+        try
+        {
+            var connectionString = Configuration.GetValue<string>("ConnectionString");
+
+            // Query to get the processed and unsent message counts separately
+            var processedCountQuery = $@"SELECT COUNT(*) FROM {tableName}
+                                      WHERE SMS_transmitted_on IS NOT NULL
+                                      AND TRUNC(SMS_transmitted_on) = TRUNC(SYSDATE)";
+
+            var unsentCountQuery = $@"SELECT COUNT(*) FROM {tableName}
+                                   WHERE SMS_transmitted_on IS NULL";
+
+            using (var connection = new OracleConnection(connectionString))
+            {
+                await connection.OpenAsync();
+
+                // First query to get processed messages
+                using (var command = new OracleCommand(processedCountQuery, connection))
+                {
+                    var processedCount = await command.ExecuteScalarAsync();
+                    processedMessages = Convert.ToInt32(processedCount);
+                }
+
+                // Second query to get unsent messages
+                using (var command = new OracleCommand(unsentCountQuery, connection))
+                {
+                    var unsentCount = await command.ExecuteScalarAsync();
+                    unsentMessages = Convert.ToInt32(unsentCount);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error fetching Oracle message counts: {ex.Message}";
         }
     }
 }

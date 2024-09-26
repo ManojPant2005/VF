@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "UI\UI.csproj", "{EA0D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{54A7E939-1143-465B-AC33-984BC7B1E064}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VF_DB", "VF_DB\VF_DB.csproj", "{B368745F-9139-4A38-9842-B5905E3156DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{54A7E939-1143-465B-AC33-984BC7B1E064}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54A7E939-1143-465B-AC33-984BC7B1E064}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54A7E939-1143-465B-AC33-984BC7B1E064}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B368745F-9139-4A38-9842-B5905E3156DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B368745F-9139-4A38-9842-B5905E3156DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B368745F-9139-4A38-9842-B5905E3156DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B368745F-9139-4A38-9842-B5905E3156DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
